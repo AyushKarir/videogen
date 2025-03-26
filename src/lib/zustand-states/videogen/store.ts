@@ -13,6 +13,7 @@ interface videogenState {
 
 const videogenStore = create<{
     state: videogenState;
+    updateKey: (key: string) => void;
     updatePrompt: (prompt: string) => void;
     updateGuidanceScale: (guidance_scale: number) => void;
     updateModel: (model: string) => void;
