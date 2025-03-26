@@ -1,6 +1,6 @@
 "use client";
 
-import ButtonRadio from "@/components/ui/button-radio";
+// import ButtonRadio from "@/components/ui/button-radio";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,16 +9,16 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger
-} from "@/components/ui/accordion"
+// import {
+//     Accordion,
+//     AccordionContent,
+//     AccordionItem,
+//     AccordionTrigger
+// } from "@/components/ui/accordion"
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
-import useTextToImageRealtimeStore from "@/lib/zustand-states/text-to-image-realtime/store";
+// import useTextToImageRealtimeStore from "@/lib/zustand-states/text-to-image-realtime/store";
 import { CircleAlert } from "lucide-react";
 import React, { useState } from "react";
 import { useResize } from "@/components/resize-context";
@@ -35,7 +35,7 @@ const Sidebar = () => {
     const [isAdditionalSettingsOpen, setIsAdditionalSettingsOpen] =
         useState(false);
 
-    const [duration, setDuration] = useState("5")
+    // const [duration, setDuration] = useState("5")
 
 
     const { screenWidth } = useResize();
@@ -48,28 +48,28 @@ const Sidebar = () => {
         updateGuidanceScale,
         updateShiftScale,
         updatePrompt,
-        updateOutputFile,
+        // updateOutputFile,
         updateDuration,
         updateModel } = videogenStore();
 
-    const samples = [
-        {
-            name: "1",
-            value: "1",
-        },
-        {
-            name: "2",
-            value: "2",
-        },
-        {
-            name: "3",
-            value: "3",
-        },
-        {
-            name: "4",
-            value: "4",
-        },
-    ];
+    // const samples = [
+    //     {
+    //         name: "1",
+    //         value: "1",
+    //     },
+    //     {
+    //         name: "2",
+    //         value: "2",
+    //     },
+    //     {
+    //         name: "3",
+    //         value: "3",
+    //     },
+    //     {
+    //         name: "4",
+    //         value: "4",
+    //     },
+    // ];
 
     // const resolutions = {
     //     "1:1": {
@@ -184,14 +184,14 @@ const Sidebar = () => {
                                         <CircleAlert className="text-muted-foreground size-4" />
                                     </TooltipTrigger>
                                     <TooltipContent side="right">
-                                        <p>Write those items you don't want in the video.</p>
+                                        <p>Write those items you don&apos;t want in the video.</p>
                                     </TooltipContent>
                                 </Tooltip>
                             </Label>
                             <Textarea
                                 onChange={(e) => updatePrompt(e.target.value)}
                                 value={state.neg_prompt}
-                                placeholder="Write those items you don't want in the video."
+                                placeholder="Write those items you don&apos;t want in the video."
                                 className={cn(
                                     " border px-2 border-border rounded-md resize",
                                     screenWidth > 768 ? "" : ""
