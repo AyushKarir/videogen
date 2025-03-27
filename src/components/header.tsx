@@ -54,7 +54,7 @@ const Header = () => {
         </Link>
         <ModelSelector />
       </div>
-      <h3 className="font-bold hidden lg:block">Imagen Playground</h3>
+      <h3 className="font-bold hidden lg:block">VideoFusion Playground</h3>
       <div className="flex items-center gap-1 sm:gap-3">
         <ModeToggle />
         {isAuthenticated && <UserTokens />}

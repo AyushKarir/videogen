@@ -27,7 +27,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider"
 
 import { RectangleHorizontal, Square, RectangleVertical } from 'lucide-react';
-import videogenStore from "@/lib/zustand-states/videogen/store";
+import videogenStore from "@/lib/zustand-states/videogen-text-to-video/store";
 
 
 const Sidebar = () => {

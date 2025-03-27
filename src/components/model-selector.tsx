@@ -64,7 +64,7 @@ const models: modelGroup[] = [
     items: [
       {
         label: "Text to Video Generation",
-        route: "/videogen",
+        route: "/videogen-text-to-video",
         type: "item",
         icon: CheckCheck,
       },

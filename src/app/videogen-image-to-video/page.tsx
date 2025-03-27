@@ -1,7 +1,7 @@
 import React from "react";
 import PlaygroundWrapper from "@/components/wrappers/playground-wrapper";
-import Content from "@/components/pages/videogen/content";
-import Sidebar from "@/components/pages/videogen/sidebar";
+import Content from "@/components/pages/videogen-image-to-video/content";
+import Sidebar from "@/components/pages/videogen-image-to-video/sidebar";
 
 const RealtimeTextToImage = () => {
     return (
