@@ -24,11 +24,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { CircleAlert } from "lucide-react";
 import React, { useState } from "react";
 import { useResize } from "@/components/resize-context";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider"
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
-import { RectangleHorizontal, Square, RectangleVertical } from 'lucide-react';
 import useVideogenSceneCreatorStore from "@/lib/zustand-states/videogen-scene-creator/store";
 
 
@@ -62,7 +60,7 @@ const Sidebar = () => {
 
     const {
         state,
-        updateScenes,
+        // updateScenes,
         addScene,
         updateScene,
         updateNegPrompt,
@@ -129,9 +127,9 @@ const Sidebar = () => {
     //     updateHeight(resolutions[e as "1:1" | "3:4" | "4:3"].height.toString());
     //     updateWidth(resolutions[e as "1:1" | "3:4" | "4:3"].width.toString());
     // };
-    const updateModel2 = (value: string) => {
-        useVideogenSceneCreatorStore.getState().updateOutputFile(value);
-    };
+    // const updateModel2 = (value: string) => {
+    //     useVideogenSceneCreatorStore.getState().updateOutputFile(value);
+    // };
     console.log("model " + state.resolution, "scenes " + JSON.stringify(state.scenes), "neg " + state.neg_prompt,);
     return (
         <ScrollArea className="h-full px-2 sm:px-4">

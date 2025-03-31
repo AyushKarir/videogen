@@ -20,7 +20,7 @@ import {
   ReplaceBackgroundResponse,
 } from "@/lib/types/replace-background";
 
-import uploadAndGetUrl from "@/lib/upload-and-get-url";
+// import uploadAndGetUrl from "@/lib/upload-and-get-url";
 import { cn } from "@/lib/utils";
 import useApiKeyStore from "@/lib/zustand-states/apikey-store";
 import useReplaceBackgroundStore from "@/lib/zustand-states/replace-background/store";
@@ -102,7 +102,7 @@ const Content = () => {
 
       const data: ReplaceBackgroundResponse = await response.json();
 
-      
+
       if (data.status === "error" || data.status === "failed") {
         toast.error(data.message);
         setIsSubmitting(false);

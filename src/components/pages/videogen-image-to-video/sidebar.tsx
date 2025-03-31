@@ -17,17 +17,16 @@ import {
 //     AccordionTrigger
 // } from "@/components/ui/accordion"
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import { cn } from "@/lib/utils";
-import { Textarea } from "@/components/ui/textarea";
+// import { cn } from "@/lib/utils";
+// import { Textarea } from "@/components/ui/textarea";
 // import useTextToImageRealtimeStore from "@/lib/zustand-states/text-to-image-realtime/store";
 import { CircleAlert } from "lucide-react";
 import React, { useState } from "react";
-import { useResize } from "@/components/resize-context";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider"
 
-import { RectangleHorizontal, Square, RectangleVertical } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+
+
+
 import useVideogenImageToVideoStore from "@/lib/zustand-states/videogen-image-to-video/store";
 import { Input } from "@/components/ui/input";
 import convertToBase64 from "@/lib/convert-to-base-64";
@@ -42,7 +41,7 @@ const Sidebar = () => {
     // const [duration, setDuration] = useState("5")
 
 
-    const { screenWidth } = useResize();
+    // const { screenWidth } = useResize();
 
     const [preview, setPreview] = useState<string | null>(null);
 

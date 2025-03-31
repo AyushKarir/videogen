@@ -183,7 +183,7 @@ const useVideogenSceneCreatorStore = create<{
     updateTemp: (temp: boolean) => void;
     updateResults: (results: string[]) => void;
     updateResolution: (resolution: Resolution) => void;
-    getFormattedData: () => { scene: any[], negative_prompt: string };
+    getFormattedData: () => { scene: Scene[], negative_prompt: string };
 
 
     updateResultHeight: (resultHeight: string) => void;

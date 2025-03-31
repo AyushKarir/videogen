@@ -12,7 +12,7 @@ import {
     // ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Textarea } from "@/components/ui/textarea";
+
 import ViewDemo from "@/components/view-demo";
 import {
     VideogenSceneCreatorRequestBodyProps,
@@ -39,10 +39,9 @@ const Content = () => {
 
     const {
         state,
-        updateKey,
+
         updateEta,
         updateNegPrompt,
-        updateOutputFile,
         updateResults,
         updateResultHeight,
         updateResultWidth,

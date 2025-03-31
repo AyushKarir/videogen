@@ -7,12 +7,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import GenerationLoader from "@/components/ui/generation-loader";
 import {
-    ResizableHandle,
+
     ResizablePanel,
-    ResizablePanelGroup,
+
 } from "@/components/ui/resizable";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Textarea } from "@/components/ui/textarea";
+// import { Textarea } from "@/components/ui/textarea";
 import ViewDemo from "@/components/view-demo";
 import {
     TextToImageRealtimeRequestBodyProps,

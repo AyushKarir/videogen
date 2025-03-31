@@ -1,19 +1,9 @@
 "use client";
 
 import {
-  Baby,
+
   CheckCheck,
   ChevronsUpDown,
-  Edit2,
-  Eraser,
-  Globe,
-  ImageMinus,
-  ImagePlus,
-  ImageUpscale,
-  LampDesk,
-  TextCursorInput,
-  TextQuote,
-  Zap,
   Waves,
   Video,
   ScanFace,
