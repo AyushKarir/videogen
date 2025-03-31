@@ -43,8 +43,8 @@ export type VideogenSceneCreatorResponse = {
         webhook?: string | null;
     };
     future_links?: string[]; // Only for processing status
-    fetch_result?: string; // Only for processing status
-    eta?: number; // Only for processing status
+    fetch_result: string; // Only for processing status
+    eta: number; // Only for processing status
 }
 
 export type VideogenSceneCreatorRequestBodyProps = {

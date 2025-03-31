@@ -7,9 +7,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import GenerationLoader from "@/components/ui/generation-loader";
 import {
-    ResizableHandle,
+    // ResizableHandle,
     ResizablePanel,
-    ResizablePanelGroup,
+    // ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
@@ -44,6 +44,8 @@ const Content = () => {
         updateNegPrompt,
         updateOutputFile,
         updateResults,
+        updateResultHeight,
+        updateResultWidth,
         updateScenes,
         getFormattedData
     } = useVideogenSceneCreatorStore();

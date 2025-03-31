@@ -153,7 +153,7 @@ interface VideogenState {
     neg_prompt: string;
     scenes: Scene[];
     output_file: string;
-    model: "mp4" | "gif";
+    // model: "mp4" | "gif";
     height: number;
     width: number;
     temp: boolean;
@@ -162,6 +162,9 @@ interface VideogenState {
     eta: number;
     results: string[];
     resolution: Resolution;
+
+    resultHeight: string;
+    resultWidth: string;
 }
 
 const useVideogenSceneCreatorStore = create<{
@@ -181,6 +184,10 @@ const useVideogenSceneCreatorStore = create<{
     updateResults: (results: string[]) => void;
     updateResolution: (resolution: Resolution) => void;
     getFormattedData: () => { scene: any[], negative_prompt: string };
+
+
+    updateResultHeight: (resultHeight: string) => void;
+    updateResultWidth: (resultWidth: string) => void;
 }>((set, get) => ({
     state: {
         key: "",
@@ -192,15 +199,18 @@ const useVideogenSceneCreatorStore = create<{
             { prompt: "", duration: 3 },
         ],
         output_file: "",
-        model: "mp4",
+        // model: "mp4",
         eta: 20,
         results: [],
         resolution: "640x480",
-        height: 0,
-        width: 0,
+        height: 640,
+        width: 640,
         temp: false,
         webhook: false,
         track_id: false,
+
+        resultHeight: "640",
+        resultWidth: "480",
     },
 
     // Update functions
@@ -257,6 +267,12 @@ const useVideogenSceneCreatorStore = create<{
 
     updateTemp: (temp) =>
         set((state) => ({ state: { ...state.state, temp } })),
+
+
+    updateResultHeight: (resultHeight) =>
+        set((state) => ({ state: { ...state.state, resultHeight } })),
+    updateResultWidth: (resultWidth) =>
+        set((state) => ({ state: { ...state.state, resultWidth } })),
 
     // Format data for API submission
     getFormattedData: () => {

@@ -81,10 +81,10 @@ const Sidebar = () => {
         });
     };
 
-    const handleDeleteScene = (index) => {
+    const handleDeleteScene = (index: number) => {
         deleteScene(index);
     };
-    const handleUpdateScenePrompt = (index, value) => {
+    const handleUpdateScenePrompt = (index: number, value: string) => {
         updateScene(index, { prompt: value });
     };
 
