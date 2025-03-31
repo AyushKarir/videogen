@@ -15,28 +15,38 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import ViewDemo from "@/components/view-demo";
 import {
-    TextToImageRealtimeRequestBodyProps,
-    TextToImageRealtimeResponse,
-} from "@/lib/types/text-to-image-realtime";
+    VideogenSceneCreatorRequestBodyProps,
+    VideogenSceneCreatorResponse,
+} from "@/lib/types/videogen-scene-creator";
 import { cn } from "@/lib/utils";
 import useApiKeyStore from "@/lib/zustand-states/apikey-store";
-import useTextToImageRealtimeStore from "@/lib/zustand-states/text-to-image-realtime/store";
+import useVideogenSceneCreatorStore from "@/lib/zustand-states/videogen-scene-creator/store";
 import { CircleAlert, LoaderCircle, Waves } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const Content = () => {
+    // const {
+    //     state,
+    //     updateKey,
+    //     updateNegPrompt,
+    //     updateOutputFile,
+    //     updatePrompt1,
+    //     updatePrompt2,
+    //     updatePrompt3,
+    //     updateEta,
+    // } = useVideogenSceneCreatorStore();
+
     const {
         state,
-        updatePrompt,
-        updateResults,
-        updateResultHeight,
-        updateResultWidth,
-        updateHeight,
-        updateWidth,
-        updateSamples,
+        updateKey,
         updateEta,
-    } = useTextToImageRealtimeStore();
+        updateNegPrompt,
+        updateOutputFile,
+        updateResults,
+        updateScenes,
+        getFormattedData
+    } = useVideogenSceneCreatorStore();
 
     const { screenWidth } = useResize();
     const { apiKey } = useApiKeyStore();
@@ -44,6 +54,10 @@ const Content = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
+
+
+    const [resultHeight, setResultHeight] = useState("");
+    const [resultWidth, setResultWidth] = useState("");
 
     useEffect(() => {
         if (apiKey) {
@@ -60,19 +74,33 @@ const Content = () => {
             return;
         }
 
-        if (!state.prompt && state.prompt.length <= 0) {
-            toast.error("Please provide prompt.");
+        if (!state.scenes || state.scenes.length === 0) {
+            toast.error("Please provide at least one scene.");
             setIsSubmitting(false);
             return;
         }
 
-        const requestBody: TextToImageRealtimeRequestBodyProps = {
+        for (const scene of state.scenes) {
+            if (!scene.prompt || scene.prompt.trim().length === 0) {
+                toast.error("Each scene must have a prompt.");
+                setIsSubmitting(false);
+                return;
+            }
+            if (!state.neg_prompt || state.neg_prompt.trim().length === 0) {
+                toast.error("Each scene must have a negative prompt.");
+                setIsSubmitting(false);
+                return;
+            }
+        }
+
+        const formattedData = getFormattedData();
+
+        const requestBody: VideogenSceneCreatorRequestBodyProps = {
             key: apiKey,
-            prompt: state.prompt,
-            negative_prompt: "",
-            samples: state.samples,
-            height: state.height,
-            width: state.width,
+            scenes: formattedData.scene,
+            negative_prompt: formattedData.negative_prompt,
+            height: state.height || 480,
+            width: state.width || 640,
             safety_checker: false,
             seed: null,
             base64: true,
@@ -82,7 +110,7 @@ const Content = () => {
 
         try {
             const response = await fetch(
-                "https://modelslab.com/api/v6/realtime/text2img",
+                "https://modelslab.com/api/v6/video/scene_creator",
                 {
                     method: "POST",
                     headers: {
@@ -93,12 +121,12 @@ const Content = () => {
             );
 
             if ("error" in response) {
-                toast.error("Error generating image");
+                toast.error("Error generating video");
                 setIsSubmitting(false);
                 return;
             }
 
-            const data: TextToImageRealtimeResponse = await response.json();
+            const data: VideogenSceneCreatorResponse = await response.json();
 
             if (data.status === "error") {
                 toast.error(data.message);
@@ -107,15 +135,16 @@ const Content = () => {
             }
 
             if (data.status === "success") {
-                toast.success("Image generated successfully");
-                updateResults(data.output);
-                updateResultHeight(data.meta.height.toString());
-                updateResultWidth(data.meta.width.toString());
-                updateEta(data.generationTime);
+                toast.success("Video generated successfully");
+                updateResults(data.output || []);
+                updateResultHeight(data.meta?.height?.toString() || "");
+                updateResultWidth(data.meta?.width?.toString() || "");
+                updateEta(data.generationTime || 0);
+                setIsSubmitting(false);
             }
 
             if (data.status === "failed") {
-                toast.error(data.message || "failed to generate image");
+                toast.error(data.message || "failed to generate video");
                 setIsProcessing(false);
                 return;
             }
@@ -125,9 +154,10 @@ const Content = () => {
                 // updateResults(data.future_links);
                 setIsProcessing(true);
                 updateEta(data.eta);
-                updateResultHeight(data.meta.height.toString());
-                updateResultWidth(data.meta.width.toString());
-
+                if (data.meta) {
+                    updateResultHeight(data.meta.height?.toString() || "");
+                    updateResultWidth(data.meta.width?.toString() || "");
+                }
                 const checkAccessibility = async (url: string) => {
                     try {
                         const response = await fetch(url, {
@@ -139,7 +169,7 @@ const Content = () => {
                         });
                         const result = await response.json();
                         if (result.status === "success") {
-                            updateResults(data.future_links);
+                            updateResults(data.future_links || []);
                             setIsProcessing(false);
                         } else if (result.status === "failed") {
                             toast.error("failed to generate image");
@@ -172,13 +202,15 @@ const Content = () => {
     }
 
     function handleReset() {
-        updatePrompt("");
+        updateScenes([
+            { prompt: "", duration: 3 },
+            { prompt: "", duration: 3 },
+            { prompt: "", duration: 3 }
+        ]);
+        updateNegPrompt("");
         updateResults([]);
-        updateResultHeight("");
-        updateResultWidth("");
-        updateHeight("1024");
-        updateWidth("1024");
-        updateSamples("1");
+        setResultHeight("");
+        setResultWidth("");
     }
     return (
         <div
@@ -189,16 +221,8 @@ const Content = () => {
                 Icon={Waves}
                 heading="Scene Creator"
                 subHeading=" Click on 'View Demo' to watch a tutorial video and see
-                how it works."
+            how it works."
             />
-            {/* <ResizablePanelGroup
-                direction={screenWidth > 768 ? "horizontal" : "vertical"}
-                className="rounded-lg"
-            > */}
-
-            {/* {screenWidth > 768 && (
-                    <ResizableHandle withHandle className="bg-transparent" />
-                )} */}
             <ResizablePanel
                 defaultSize={50}
                 minSize={30}
@@ -221,13 +245,12 @@ const Content = () => {
                     </Badge>
                     <AvgGenTime eta={state.eta} />
                     <div className="h-full">
-                        {/*  */}
                         {(isSubmitting || isProcessing) && (
                             <div className="flex items-center justify-center flex-col gap-2 h-full">
                                 <GenerationLoader />
                                 <p className="text-sm">
                                     {isProcessing
-                                        ? "Image is processing in background..."
+                                        ? "Video is processing in background..."
                                         : "Generating..."}
                                 </p>
                             </div>
@@ -246,8 +269,8 @@ const Content = () => {
                                             }
                                             key={index}
                                             imgUrl={result}
-                                            height={state.resultHeight}
-                                            width={state.resultWidth}
+                                            height={resultHeight}
+                                            width={resultWidth}
                                         />
                                     ))}
                                 </div>
@@ -256,7 +279,6 @@ const Content = () => {
                     </div>
                 </div>
             </ResizablePanel>
-            {/* </ResizablePanelGroup> */}
 
             <div className="mx-1 flex gap-2 flex-col">
                 {!isAuthenticated && (

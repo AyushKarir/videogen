@@ -9,6 +9,7 @@ interface videogenState {
     model: string;
     duration: string;
     output_file: string;
+    height: string;
 }
 
 const videogenStore = create<{
@@ -30,6 +31,7 @@ const videogenStore = create<{
         model: "",
         duration: "5",
         output_file: "",
+        height: "512"
     },
     updateKey: (key) => set((state) => ({ state: { ...state.state, key } })),
     updatePrompt: (neg_prompt) =>

@@ -46,13 +46,47 @@ const Sidebar = () => {
 
 
 
-    const { state,
-        updatePrompt1,
-        updatePrompt2,
-        updatePrompt3,
+    // const { state,
+    //     // updatePrompt1,
+    //     // updatePrompt2,
+    //     // updatePrompt3,
+    //     // updateNegPrompt,
+    //     updateModel,
+    //     updateResolution,
+    //     updateScenePrompt, 
+    // updateGlobalNegativePrompt, 
+    // addScene, 
+    // } = useVideogenSceneCreatorStore();
+
+
+
+    const {
+        state,
+        updateScenes,
+        addScene,
+        updateScene,
         updateNegPrompt,
-        updateModel,
+        updateResolution,
+        deleteScene
     } = useVideogenSceneCreatorStore();
+
+    // Default duration for new scenes
+    const DEFAULT_DURATION = 3;
+
+    // Add a new scene
+    const handleAddScene = () => {
+        addScene({
+            prompt: "",
+            duration: DEFAULT_DURATION
+        });
+    };
+
+    const handleDeleteScene = (index) => {
+        deleteScene(index);
+    };
+    const handleUpdateScenePrompt = (index, value) => {
+        updateScene(index, { prompt: value });
+    };
 
     // const samples = [
     //     {
@@ -98,7 +132,7 @@ const Sidebar = () => {
     const updateModel2 = (value: string) => {
         useVideogenSceneCreatorStore.getState().updateOutputFile(value);
     };
-    console.log("model " + state.model, "duaration " + state.prompt1, "promp1 " + state.prompt2, "prop2 " + state.prompt3, "neg " + state.neg_prompt,);
+    console.log("model " + state.resolution, "scenes " + JSON.stringify(state.scenes), "neg " + state.neg_prompt,);
     return (
         <ScrollArea className="h-full px-2 sm:px-4">
             <form className="space-y-5 py-2  sm:py-4" action="">
@@ -106,75 +140,54 @@ const Sidebar = () => {
 
 
 
-                <div className="space-y-3 px-2">
-                    <Label className="flex gap-2 items-center">
-                        Prompt(Scene 1)
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <CircleAlert className="text-muted-foreground size-4" />
-                            </TooltipTrigger>
-                            <TooltipContent side="right">
-                                <p>Write a prompt to generate your unique scene.</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </Label>
-                    <Textarea
-                        onChange={(e) => updatePrompt1(e.target.value)}
-                        value={state.prompt1}
-                        placeholder="Write those items you don&apos;t want in the video."
-                        className={cn(
-                            " border px-2 border-border rounded-md resize",
-                            screenWidth > 768 ? "" : ""
-                        )}
-                    ></Textarea>
-                </div>
+                {state.scenes.map((scene, index) => (
+                    <div key={index} className="space-y-3 px-2">
+                        <Label className="flex gap-2 items-center">
+                            Prompt(Scene {index + 1})
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <CircleAlert className="text-muted-foreground size-4" />
+                                </TooltipTrigger>
+                                <TooltipContent side="right">
+                                    <p>Write a prompt to generate your unique scene.</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </Label>
+                        <Textarea
+                            onChange={(e) => handleUpdateScenePrompt(index, e.target.value)}
+                            value={scene.prompt}
+                            placeholder="Write a prompt for this scene"
+                            className={cn(
+                                "border px-2 border-border rounded-md resize",
+                                screenWidth > 768 ? "" : ""
+                            )}
+                        />
+
+                        <div className="flex items-center gap-2">
 
 
-                <div className="space-y-3 px-2">
-                    <Label className="flex gap-2 items-center">
-                        Prompt(Scene 2)
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <CircleAlert className="text-muted-foreground size-4" />
-                            </TooltipTrigger>
-                            <TooltipContent side="right">
-                                <p>Write a prompt to generate your unique scene.</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </Label>
-                    <Textarea
-                        onChange={(e) => updatePrompt2(e.target.value)}
-                        value={state.prompt2}
-                        placeholder="Write those items you don&apos;t want in the video."
-                        className={cn(
-                            " border px-2 border-border rounded-md resize",
-                            screenWidth > 768 ? "" : ""
-                        )}
-                    ></Textarea>
-                </div>
-                <div className="space-y-3 px-2">
-                    <Label className="flex gap-2 items-center">
-                        Prompt(Scene 3)
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <CircleAlert className="text-muted-foreground size-4" />
-                            </TooltipTrigger>
-                            <TooltipContent side="right">
-                                <p>Write a prompt to generate your unique scene.</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </Label>
-                    <Textarea
-                        onChange={(e) => updatePrompt3(e.target.value)}
-                        value={state.prompt3}
-                        placeholder="Write those items you don&apos;t want in the video."
-                        className={cn(
-                            " border px-2 border-border rounded-md resize",
-                            screenWidth > 768 ? "" : ""
-                        )}
-                    ></Textarea>
-
-                    <Button className="w-full">Add Scene</Button>
+                            {index > 0 && (
+                                <Button
+                                    type="button"
+                                    variant="destructive"
+                                    size="sm"
+                                    onClick={() => handleDeleteScene(index)}
+                                    className="ml-auto"
+                                >
+                                    Remove
+                                </Button>
+                            )}
+                        </div>
+                    </div>
+                ))}
+                <div className="px-2">
+                    <Button
+                        type="button"
+                        className="w-full"
+                        onClick={handleAddScene}
+                    >
+                        Add Scene
+                    </Button>
                 </div>
 
                 <div className="space-y-3 px-2">
@@ -231,17 +244,17 @@ const Sidebar = () => {
                             <label className="block text-sm font-medium">Output File</label>
                             <Tabs
                                 onValueChange={(value) => {
-                                    // Type assertion to ensure it's either "mp4" or "gif"
-                                    const model = value as "mp4" | "gif";
-                                    updateModel(model);
+                                    // Type assertion to ensure it's one of the allowed resolutions
+                                    updateResolution(value as "640x480" | "520x480" | "480x360");
                                 }}
-                                value={state.model}
-                                defaultValue="mp4"
+                                value={state.resolution}
+                                defaultValue="640x480"
                                 className="w-full"
                             >
-                                <TabsList className="grid grid-cols-2 w-full">
-                                    <TabsTrigger value="mp4">mp4</TabsTrigger>
-                                    <TabsTrigger value="gif">gif</TabsTrigger>
+                                <TabsList className="grid grid-cols-3 w-full">
+                                    <TabsTrigger value="640x480">640x480</TabsTrigger>
+                                    <TabsTrigger value="520x480">520x480</TabsTrigger>
+                                    <TabsTrigger value="480x360">480x360</TabsTrigger>
                                 </TabsList>
                             </Tabs>
                         </div>
