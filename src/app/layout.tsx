@@ -10,8 +10,8 @@ import { Suspense } from "react";
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "Imagen - playground",
-  description: "Imagen Playground by ModelsLab",
+  title: "VideoFusion - playground",
+  description: "VideoFusion Playground by ModelsLab",
 };
 
 export default function RootLayout({
@@ -45,7 +45,7 @@ export default function RootLayout({
           attribute="class"
           defaultTheme="system"
           enableSystem
-          // disableTransitionOnChange
+        // disableTransitionOnChange
         >
           <Providers>
             <Suspense fallback={<div />}>

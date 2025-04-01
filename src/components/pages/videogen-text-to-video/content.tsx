@@ -187,7 +187,7 @@ const Content = () => {
             <ViewDemo
                 videoUrl=""
                 Icon={Zap}
-                heading="  Realtime (Text to Image)"
+                heading="VideoFusion (Text to Video)"
                 subHeading=" Click on 'View Demo' to watch a tutorial video and see
                 how it works."
             />
@@ -206,7 +206,7 @@ const Content = () => {
                     <Textarea
                         onChange={(e) => updatePrompt(e.target.value)}
                         value={state.prompt}
-                        placeholder="Write a prompt to generate your unique image."
+                        placeholder="Write a prompt to generate your unique video."
                         className={cn(
                             "h-full border border-border rounded-md resize-none",
                             screenWidth > 768 ? "" : "min-h-72"

@@ -187,7 +187,7 @@ const Content = () => {
             <ViewDemo
                 videoUrl=""
                 Icon={Waves}
-                heading="Motion (Image to Video)"
+                heading="VideoFusion (Image to Video)"
                 subHeading="Click on 'Make it Move' to see how images move in videos."
             />
             {/* <ResizablePanelGroup
