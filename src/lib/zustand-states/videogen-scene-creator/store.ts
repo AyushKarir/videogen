@@ -146,6 +146,7 @@ type Resolution = "640x480" | "520x480" | "480x360";
 interface Scene {
     prompt: string;
     duration: number;
+    negative_prompt: string;
 }
 
 interface VideogenState {
@@ -183,7 +184,7 @@ const useVideogenSceneCreatorStore = create<{
     updateTemp: (temp: boolean) => void;
     updateResults: (results: string[]) => void;
     updateResolution: (resolution: Resolution) => void;
-    getFormattedData: () => { scene: Scene[], negative_prompt: string };
+    getFormattedData: () => { scenes: Scene[], negative_prompt: string };
 
 
     updateResultHeight: (resultHeight: string) => void;
@@ -194,9 +195,9 @@ const useVideogenSceneCreatorStore = create<{
         neg_prompt: "",
         scenes: [
             // Initialize with 3 empty scenes
-            { prompt: "", duration: 3 },
-            { prompt: "", duration: 3 },
-            { prompt: "", duration: 3 },
+            { prompt: "", duration: 3, negative_prompt: "" },
+            { prompt: "", duration: 3, negative_prompt: "" },
+            { prompt: "", duration: 3, negative_prompt: "" },
         ],
         output_file: "",
         // model: "mp4",
@@ -280,12 +281,12 @@ const useVideogenSceneCreatorStore = create<{
 
         const formattedScenes = scenes.map(scene => ({
             prompt: scene.prompt,
-            negative_prompt: neg_prompt,
+            negative_prompt: scene.negative_prompt,
             duration: scene.duration
         }));
 
         return {
-            scene: formattedScenes,
+            scenes: formattedScenes,
             negative_prompt: neg_prompt
         };
     }

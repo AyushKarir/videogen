@@ -98,7 +98,7 @@ const Content = () => {
 
         const requestBody: VideogenSceneCreatorRequestBodyProps = {
             key: apiKey,
-            scenes: formattedData.scene,
+            scenes: formattedData.scenes,
             negative_prompt: formattedData.negative_prompt,
             height: state.height || 480,
             width: state.width || 640,
@@ -204,9 +204,11 @@ const Content = () => {
 
     function handleReset() {
         updateScenes([
-            { prompt: "", duration: 3 },
-            { prompt: "", duration: 3 },
-            { prompt: "", duration: 3 }
+            {
+                prompt: "", duration: 3, negative_prompt: ""
+            },
+            { prompt: "", duration: 3, negative_prompt: "" },
+            { prompt: "", duration: 3, negative_prompt: "" }
         ]);
         updateNegPrompt("");
         updateResults([]);

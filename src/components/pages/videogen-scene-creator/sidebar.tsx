@@ -75,7 +75,8 @@ const Sidebar = () => {
     const handleAddScene = () => {
         addScene({
             prompt: "",
-            duration: DEFAULT_DURATION
+            duration: DEFAULT_DURATION,
+            negative_prompt: ""
         });
     };
 
