@@ -213,8 +213,8 @@ const Content = () => {
         ]);
         updateNegPrompt("");
         updateResults([]);
-        setResultHeight("");
-        setResultWidth("");
+        // setResultHeight("");
+        // setResultWidth("");
     }
     return (
         <div
