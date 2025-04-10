@@ -47,7 +47,7 @@ const Sidebar = () => {
 
 
 
-    const { state, updateInitImage, updateModel } = useVideogenImageToVideoStore();
+    const { state, updateInitImage, updateModelId } = useVideogenImageToVideoStore();
 
     // const samples = [
     //     {
@@ -194,8 +194,8 @@ const Sidebar = () => {
                         <div className="space-y-2 px-2">
                             <label className="block text-sm font-medium">Output File</label>
                             <Tabs
-                                onValueChange={updateModel}
-                                value={state.model}
+                                onValueChange={updateModelId}
+                                value={state.model_id}
                                 defaultValue="mp4" className="w-full">
                                 <TabsList className="grid grid-cols-2 w-full">
                                     <TabsTrigger value="mp4">mp4</TabsTrigger>
