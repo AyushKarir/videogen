@@ -41,6 +41,7 @@ const Sidebar = () => {
     const { screenWidth } = useResize();
 
 
+    const [isCogVideoSelected, setIsCogVideoSelected] = useState(false);
 
 
 
@@ -128,7 +129,7 @@ const Sidebar = () => {
                             </TooltipContent>
                         </Tooltip>
                     </Label>
-                    <Tabs
+                    {/* <Tabs
                         defaultValue="landscape"
                         className="w-full"
                         value={state.resolution}
@@ -145,7 +146,30 @@ const Sidebar = () => {
                                 <Square className="py-[1px] w-8" />
                             </TabsTrigger>
                         </TabsList>
+                    </Tabs> */}
+
+                    <Tabs
+                        defaultValue="landscape"
+                        className="w-full"
+                        value={state.resolution}
+                        onValueChange={updateResolution}
+                    >
+                        <TabsList className={`grid grid-cols-${state.model === 'cogvideox' ? '2' : '3'} w-full`}>
+                            <TabsTrigger value="landscape" className="py-0">
+                                <RectangleHorizontal className="py-[1px] w-8" />
+                            </TabsTrigger>
+                            <TabsTrigger value="vertical" className="py-0">
+                                <RectangleVertical className="py-[1px] w-8" />
+                            </TabsTrigger>
+                            {state.model !== 'cogvideox' && (
+                                <TabsTrigger value="square" className="py-0">
+                                    <Square className="py-[1px] w-8" />
+                                </TabsTrigger>
+                            )}
+                        </TabsList>
                     </Tabs>
+
+
                 </div>
 
 
