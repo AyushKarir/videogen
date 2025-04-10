@@ -8,9 +8,9 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("/realtime-text-to-image");
+    router.push("/videogen-text-to-video");
     setTimeout(() => {
-      router.push("/realtime-text-to-image");
+      router.push("/videogen-text-to-video");
     }, 100);
   }, []);
 

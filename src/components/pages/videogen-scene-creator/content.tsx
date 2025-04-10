@@ -1,7 +1,7 @@
 "use client";
 
 import AvgGenTime from "@/components/avg-gen-time";
-import Base64ImageView from "@/components/base64-image-view";
+// import Base64ImageView from "@/components/base64-image-view";
 import { useResize } from "@/components/resize-context";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import {
     // ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import VideoView from "@/components/video-view";
 
 import ViewDemo from "@/components/view-demo";
 import {
@@ -57,8 +58,8 @@ const Content = () => {
     const [isProcessing, setIsProcessing] = useState(false);
 
 
-    const [resultHeight, setResultHeight] = useState("");
-    const [resultWidth, setResultWidth] = useState("");
+    // const [resultHeight, setResultHeight] = useState("");
+    // const [resultWidth, setResultWidth] = useState("");
 
     useEffect(() => {
         if (apiKey) {
@@ -266,14 +267,22 @@ const Content = () => {
                                     )}
                                 >
                                     {state.results.map((result, index) => (
-                                        <Base64ImageView
-                                            className={
-                                                state.results.length > 1 ? "w-[40%]" : "w-full"
-                                            }
+                                        // <Base64ImageView
+                                        //     className={
+                                        //         state.results.length > 1 ? "w-[40%]" : "w-full"
+                                        //     }
+                                        //     key={index}
+                                        //     imgUrl={result}
+                                        //     height={resultHeight}
+                                        //     width={resultWidth}
+                                        // />
+
+                                        <VideoView
+                                            className={state.results.length > 1 ? "w-[40%]" : "w-full"}
                                             key={index}
-                                            imgUrl={result}
-                                            height={resultHeight}
-                                            width={resultWidth}
+                                            videoUrl={result}
+                                            height={state.height}
+                                            width={state.width}
                                         />
                                     ))}
                                 </div>

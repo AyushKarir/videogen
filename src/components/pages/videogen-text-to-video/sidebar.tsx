@@ -27,7 +27,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider"
 
 import { RectangleHorizontal, Square, RectangleVertical } from 'lucide-react';
-import videogenStore from "@/lib/zustand-states/videogen-text-to-video/store";
+import useVideogenTextToVideo from "@/lib/zustand-states/videogen-text-to-video/store";
 
 
 const Sidebar = () => {
@@ -47,10 +47,11 @@ const Sidebar = () => {
     const { state,
         updateGuidanceScale,
         updateShiftScale,
-        updatePrompt,
+        updateNegPrompt,
+        updateResolution,
         // updateOutputFile,
         updateDuration,
-        updateModel } = videogenStore();
+        updateModel } = useVideogenTextToVideo();
 
     // const samples = [
     //     {
@@ -93,7 +94,7 @@ const Sidebar = () => {
     //     updateHeight(resolutions[e as "1:1" | "3:4" | "4:3"].height.toString());
     //     updateWidth(resolutions[e as "1:1" | "3:4" | "4:3"].width.toString());
     // };
-    console.log("model " + state.model, "duaration " + state.duration, "guidance " + state.guidance_scale, "output " + state.output_file, "prompt " + state.neg_prompt, "resolutions " + state.resolution);
+    console.log("model " + state.model, "duaration " + state.duration, "guidance " + state.guidance_scale, "output " + state.output_file, "neg prompt " + state.neg_prompt, "resolutions " + state.resolution);
     return (
         <ScrollArea className="h-full px-2 sm:px-4">
             <form className="space-y-5 py-2  sm:py-4" action="">
@@ -103,13 +104,13 @@ const Sidebar = () => {
 
                 <div className="space-y-3 px-2">
                     <Label>Model</Label>
-                    <Select>
+                    <Select value={state.model} onValueChange={(value) => updateModel(value)}>
                         <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Select a Model" />
                         </SelectTrigger>
-                        <SelectContent >
+                        <SelectContent>
                             <SelectItem value="cogvideox">cogvideox</SelectItem>
-                            <SelectItem value="Wanx 2.1" >Wanx 2.1</SelectItem>
+                            <SelectItem value="Wanx 2.1">Wanx 2.1</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -130,6 +131,8 @@ const Sidebar = () => {
                     <Tabs
                         defaultValue="landscape"
                         className="w-full"
+                        value={state.resolution}
+                        onValueChange={(value) => updateResolution(value)}
                     >
                         <TabsList className="grid grid-cols-3 w-full">
                             <TabsTrigger value="landscape" className="py-0">
@@ -189,7 +192,7 @@ const Sidebar = () => {
                                 </Tooltip>
                             </Label>
                             <Textarea
-                                onChange={(e) => updatePrompt(e.target.value)}
+                                onChange={(e) => updateNegPrompt(e.target.value)}
                                 value={state.neg_prompt}
                                 placeholder="Write those items you don&apos;t want in the video."
                                 className={cn(

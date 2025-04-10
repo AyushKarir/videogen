@@ -70,15 +70,40 @@ const models: modelGroup[] = [
         type: "item",
         icon: Film,
       },
-      {
-        label: "Deepfake",
-        route: "/videogen-deepfake",
-        type: "item",
-        icon: ScanFace,
-      },
     ],
-  },
 
+  },
+  {
+    title: "Deepfake",
+    type: "group",
+    icon: ScanFace,
+    items: [
+      {
+        label: "Image Single",
+        route: "/deepfake-image-single",
+        type: "item",
+        icon: Film,
+      },
+      {
+        label: "Image Multi",
+        route: "/deepfake-image-multi",
+        type: "item",
+        icon: Film,
+      },
+      {
+        label: "Video Single",
+        route: "/deepfake-video-single",
+        type: "item",
+        icon: Film,
+      },
+      {
+        label: "Video Multi",
+        route: "/deepfake-video-multi",
+        type: "item",
+        icon: Film,
+      },
+    ]
+  }
   // {
   //   label: "Text to Image",
   //   route: "/text-to-image",

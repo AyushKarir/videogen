@@ -1,7 +1,7 @@
 "use client";
 
 import AvgGenTime from "@/components/avg-gen-time";
-import Base64ImageView from "@/components/base64-image-view";
+// import Base64ImageView from "@/components/base64-image-view";
 import { useResize } from "@/components/resize-context";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,30 +13,48 @@ import {
 } from "@/components/ui/resizable";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
+import VideoView from "@/components/video-view";
 import ViewDemo from "@/components/view-demo";
 import {
-    TextToImageRealtimeRequestBodyProps,
-    TextToImageRealtimeResponse,
-} from "@/lib/types/text-to-image-realtime";
+    VideogenTextToVideoResponseProps,
+    VideogenTextToVideoRequestBodyProps,
+} from "@/lib/types/videogen-text-to-video";
 import { cn } from "@/lib/utils";
 import useApiKeyStore from "@/lib/zustand-states/apikey-store";
-import useTextToImageRealtimeStore from "@/lib/zustand-states/text-to-image-realtime/store";
+// import useTextToImageRealtimeStore from "@/lib/zustand-states/text-to-image-realtime/store";
+import useVideogenTextToVideo from "@/lib/zustand-states/videogen-text-to-video/store";
 import { CircleAlert, LoaderCircle, Zap } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const Content = () => {
+    // const {
+    //     state,
+    //     updatePrompt,
+    //     updateResults,
+    //     updateResultHeight,
+    //     updateResultWidth,
+    //     updateHeight,
+    //     updateWidth,
+    //     updateSamples,
+    //     updateEta,
+    // } = useTextToImageRealtimeStore();
+
+
     const {
         state,
         updatePrompt,
         updateResults,
-        updateResultHeight,
-        updateResultWidth,
-        updateHeight,
-        updateWidth,
-        updateSamples,
+        updateUpscaleWidth,
+        updateUpscaleHeight,
         updateEta,
-    } = useTextToImageRealtimeStore();
+        updateNegPrompt,
+        updateDuration,
+        updateGuidanceScale,
+        updateShiftScale,
+        updateOutputFile,
+        updateModel,
+    } = useVideogenTextToVideo();
 
     const { screenWidth } = useResize();
     const { apiKey } = useApiKeyStore();
@@ -66,23 +84,34 @@ const Content = () => {
             return;
         }
 
-        const requestBody: TextToImageRealtimeRequestBodyProps = {
+        const requestBody: VideogenTextToVideoRequestBodyProps = {
             key: apiKey,
             prompt: state.prompt,
-            negative_prompt: "",
-            samples: state.samples,
-            height: state.height,
-            width: state.width,
-            safety_checker: false,
-            seed: null,
-            base64: true,
+            negative_prompt: state.neg_prompt,
+
+            // safety_checker: false,
+            // seed: null,
             webhook: null,
             track_id: null,
+            model_id: state.model,
+
+            height: state.upscale_height,
+            width: state.upscale_width,
+            num_frames: state.num_frames,
+            num_inference_steps: state.num_inference_steps,
+            guidance_scale: state.guidance_scale,
+            upscale_height: state.upscale_height,
+            upscale_width: state.upscale_width,
+            upscale_strength: state.upscale_strength,
+            upscale_guidance_scale: state.upscale_guidance_scale,
+            upscale_num_inference_steps: state.upscale_num_inference_steps,
+            output_type: state.output_file,
+
         };
 
         try {
             const response = await fetch(
-                "https://modelslab.com/api/v6/realtime/text2img",
+                "https://modelslab.com/api/v6/video/text2video",
                 {
                     method: "POST",
                     headers: {
@@ -98,7 +127,7 @@ const Content = () => {
                 return;
             }
 
-            const data: TextToImageRealtimeResponse = await response.json();
+            const data: VideogenTextToVideoResponseProps = await response.json();
 
             if (data.status === "error") {
                 toast.error(data.message);
@@ -109,8 +138,8 @@ const Content = () => {
             if (data.status === "success") {
                 toast.success("Image generated successfully");
                 updateResults(data.output);
-                updateResultHeight(data.meta.height.toString());
-                updateResultWidth(data.meta.width.toString());
+                updateUpscaleHeight(data.meta.height);
+                updateUpscaleWidth(data.meta.width);
                 updateEta(data.generationTime);
             }
 
@@ -125,8 +154,8 @@ const Content = () => {
                 // updateResults(data.future_links);
                 setIsProcessing(true);
                 updateEta(data.eta);
-                updateResultHeight(data.meta.height.toString());
-                updateResultWidth(data.meta.width.toString());
+                updateUpscaleHeight(data.meta.height);
+                updateUpscaleWidth(data.meta.width);
 
                 const checkAccessibility = async (url: string) => {
                     try {
@@ -174,11 +203,16 @@ const Content = () => {
     function handleReset() {
         updatePrompt("");
         updateResults([]);
-        updateResultHeight("");
-        updateResultWidth("");
-        updateHeight("1024");
-        updateWidth("1024");
-        updateSamples("1");
+        updateUpscaleWidth(0);
+        updateUpscaleHeight(0);
+
+
+        updateNegPrompt("");
+        updateDuration("5");
+        updateGuidanceScale(6.5);
+        updateShiftScale(6.5);
+        updateOutputFile("mp4");
+        updateModel("cogvideox");
     }
     return (
         <div
@@ -257,14 +291,22 @@ const Content = () => {
                                         )}
                                     >
                                         {state.results.map((result, index) => (
-                                            <Base64ImageView
-                                                className={
-                                                    state.results.length > 1 ? "w-[40%]" : "w-full"
-                                                }
+                                            // <Base64ImageView
+                                            //     className={
+                                            //         state.results.length > 1 ? "w-[40%]" : "w-full"
+                                            //     }
+                                            //     key={index}
+                                            //     imgUrl={result}
+                                            //     height={state.resultHeight}
+                                            //     width={state.resultWidth}
+                                            // />
+
+                                            <VideoView
+                                                className={state.results.length > 1 ? "w-[40%]" : "w-full"}
                                                 key={index}
-                                                imgUrl={result}
-                                                height={state.resultHeight}
-                                                width={state.resultWidth}
+                                                videoUrl={result}
+                                                height={state.upscale_height}
+                                                width={state.upscale_width}
                                             />
                                         ))}
                                     </div>
