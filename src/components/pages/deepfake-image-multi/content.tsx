@@ -58,8 +58,8 @@ const Content = () => {
     const [isProcessing, setIsProcessing] = useState(false);
 
 
-    const [resultHeight, setResultHeight] = useState("");
-    const [resultWidth, setResultWidth] = useState("");
+    // const [resultHeight, setResultHeight] = useState("");
+    // const [resultWidth, setResultWidth] = useState("");
 
     useEffect(() => {
         if (apiKey) {
@@ -213,8 +213,8 @@ const Content = () => {
         ]);
         updateNegPrompt("");
         updateResults([]);
-        setResultHeight("");
-        setResultWidth("");
+        // setResultHeight("");
+        // setResultWidth("");
     }
     return (
         <div
