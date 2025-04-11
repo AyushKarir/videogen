@@ -223,7 +223,7 @@ const Content = () => {
             <ViewDemo
                 videoUrl=""
                 Icon={Waves}
-                heading="Deepfake Image (Single)"
+                heading="Deepfake Image (Multi)"
                 subHeading=" Click on 'View Demo' to watch a tutorial video and see
             how it works."
             />

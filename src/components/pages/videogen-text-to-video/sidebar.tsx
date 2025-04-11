@@ -41,7 +41,7 @@ const Sidebar = () => {
     const { screenWidth } = useResize();
 
 
-    const [isCogVideoSelected, setIsCogVideoSelected] = useState(false);
+    // const [isCogVideoSelected, setIsCogVideoSelected] = useState(false);
 
 
 
