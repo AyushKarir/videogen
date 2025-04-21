@@ -48,7 +48,7 @@ const Sidebar = () => {
 
     // const [previewInit, setPreviewInit] = useState<string | null>(null);
     const [previewReference, setPreviewReference] = useState<string | null>(null);
-    const [previewTarget, setPreviewTarget] = useState<string | null>(null);
+    // const [previewTarget, setPreviewTarget] = useState<string | null>(null);
 
 
     const [ytLink, setYtLink] = useState("");
@@ -58,7 +58,7 @@ const Sidebar = () => {
 
 
 
-    const { updateInitVideo, updateInitImage, updateReferenceImage } = useDeepfakeVideoSingle();
+    const { updateInitVideo, updateReferenceImage } = useDeepfakeVideoSingle();
 
 
 

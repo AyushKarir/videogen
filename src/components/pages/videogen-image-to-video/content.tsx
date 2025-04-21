@@ -70,7 +70,7 @@ const Content = () => {
             noise_aug_strength: state.noise_aug_strength,
             output_type: state.output_type,
 
-
+            base64: true,
             webhook: null,
             track_id: null,
         };

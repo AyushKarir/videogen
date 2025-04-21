@@ -77,7 +77,7 @@ const Content = () => {
     useEffect(() => {
         const formattedData = getFormattedData();
         const requestBody: VideogenSceneCreatorRequestBodyProps = {
-            key: apiKey,
+            key: apiKey || 'apikey',
             scene: formattedData.scene,
             negative_prompt: formattedData.negative_prompt,
             height: state.height || 480,

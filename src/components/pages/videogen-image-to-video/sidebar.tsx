@@ -170,7 +170,7 @@ const Sidebar = () => {
                         <label className="block text-sm font-medium">Output File</label>
                         <Tabs
                             onValueChange={updateOutputType}
-                            value={state.output_type}
+                            value={state.output_type ?? "mp4"}
                             defaultValue="mp4" className="w-full">
                             <TabsList className="grid grid-cols-2 w-full">
                                 <TabsTrigger value="mp4">mp4</TabsTrigger>

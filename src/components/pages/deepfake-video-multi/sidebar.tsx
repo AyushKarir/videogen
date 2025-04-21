@@ -46,7 +46,7 @@ const Sidebar = () => {
     // const { screenWidth } = useResize();
     const { apiKey } = useApiKeyStore();
 
-    const [preview, setPreview] = useState<string | null>(null);
+    // const [preview, setPreview] = useState<string | null>(null);
 
     const [ytLink, setYtLink] = useState("");
     const [videoPreviewVideo, setVideoPreviewVideo] = useState<string | null>(
