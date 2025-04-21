@@ -26,7 +26,7 @@ import { cn } from "@/lib/utils";
 import useApiKeyStore from "@/lib/zustand-states/apikey-store";
 import useDeepfakeVideoMulti from "@/lib/zustand-states/deepfake-video-multi/store";
 import { useShowCodeStore } from "@/lib/zustand-states/show-code-store";
-import useVideogenSceneCreatorStore from "@/lib/zustand-states/videogen-scene-creator/store";
+// import useVideogenSceneCreatorStore from "@/lib/zustand-states/videogen-scene-creator/store";
 import { CircleAlert, LoaderCircle, Waves } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -183,7 +183,7 @@ const Content = () => {
                     }
                 };
 
-                // checkAccessibility(data.fetch_result);
+                checkAccessibility(`https://modelslab.com/api/v6/deepfake/fetch/${data.id}`);
             }
 
             setIsSubmitting(false);

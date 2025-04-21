@@ -21,7 +21,7 @@ import {
 // import { Textarea } from "@/components/ui/textarea";
 // import useTextToImageRealtimeStore from "@/lib/zustand-states/text-to-image-realtime/store";
 import { CircleAlert } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ReactPlayer from "react-player";
 
 // import { Button } from "@/components/ui/button";
@@ -50,14 +50,13 @@ const Sidebar = () => {
     const [previewReference, setPreviewReference] = useState<string | null>(null);
     const [previewTarget, setPreviewTarget] = useState<string | null>(null);
 
-    const [preview, setPreview] = useState<string | null>(null);
 
     const [ytLink, setYtLink] = useState("");
     const [videoPreviewVideo, setVideoPreviewVideo] = useState<string | null>(
         null
     );
 
-    const [refImageURL, setRefImageURL] = useState<string | null>("");
+
 
     const { updateInitVideo, updateInitImage, updateReferenceImage } = useDeepfakeVideoSingle();
 
@@ -111,27 +110,7 @@ const Sidebar = () => {
             setPreviewReference(null);
         }
     };
-    const handleTargetImageChange = async (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const file = event.target.files?.[0];
 
-        if (file) {
-            const base64 = await convertToBase64(file) as string;
-            const imageUrl = await uploadAndGetUrl(apiKey || 'apikey', base64);
-            updateInitImage(imageUrl.link as string);
-        }
-
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPreviewTarget(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            setPreviewTarget(null);
-        }
-    };
 
     return (
         <ScrollArea className="h-full px-2 sm:px-4">

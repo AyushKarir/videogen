@@ -164,7 +164,6 @@ const Content = () => {
 
             const data: VideogenTextToVideoResponseProps = await response.json();
 
-            const { id } = data;
 
             if (data.status === "error") {
                 toast.error(data.message);

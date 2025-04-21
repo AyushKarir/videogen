@@ -27,7 +27,7 @@ import React, { useState } from "react";
 
 
 
-import useVideogenImageToVideoStore from "@/lib/zustand-states/videogen-image-to-video/store";
+// import useVideogenImageToVideoStore from "@/lib/zustand-states/videogen-image-to-video/store";
 import { Input } from "@/components/ui/input";
 import convertToBase64 from "@/lib/convert-to-base-64";
 import uploadAndGetUrl from "@/lib/upload-and-get-url";
@@ -57,7 +57,6 @@ const Sidebar = () => {
     const [previewReference, setPreviewReference] = useState<string | null>(null);
     const [previewTarget, setPreviewTarget] = useState<string | null>(null);
 
-    const [refImageURL, setRefImageURL] = useState<string | null>("");
 
 
     const { updateInitImage, updateInitVideo, updateReferenceImage } = useDeepfakeVideoMulti();
@@ -251,11 +250,11 @@ const Sidebar = () => {
                         onChange={handleReferenceImageChange}
                         className="w-fit"
                     />
-                    {preview && (
+                    {previewReference && (
                         <Image
                             height={512}
                             width={512}
-                            src={preview}
+                            src={previewReference}
                             alt="Selected preview"
                             className="mx-auto mt-2 rounded-lg"
                         />

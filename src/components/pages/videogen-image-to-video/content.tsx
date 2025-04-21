@@ -18,7 +18,7 @@ import VideoView from "@/components/video-view";
 // import { Textarea } from "@/components/ui/textarea";
 import ViewDemo from "@/components/view-demo";
 import { VideogenImageToVideoRequestBodyProps, VideogenImageToVideoResponseProps } from "@/lib/types/videogen-image-to-video";
-import { VideogenTextToVideoResponseProps } from "@/lib/types/videogen-text-to-video";
+// import { VideogenTextToVideoResponseProps } from "@/lib/types/videogen-text-to-video";
 import { cn } from "@/lib/utils";
 import useApiKeyStore from "@/lib/zustand-states/apikey-store";
 import { useShowCodeStore } from "@/lib/zustand-states/show-code-store";
@@ -34,7 +34,6 @@ const Content = () => {
         updateHeight,
         updateWidth,
         updateEta,
-        updateOutputType
     } = useVideogenImageToVideoStore();
 
 

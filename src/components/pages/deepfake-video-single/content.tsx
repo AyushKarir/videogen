@@ -18,18 +18,18 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import VideoView from "@/components/video-view";
 
 import ViewDemo from "@/components/view-demo";
-import convertToBase64 from "@/lib/convert-to-base-64";
+// import convertToBase64 from "@/lib/convert-to-base-64";
 import {
     DeepfakeVideoSingleResponseProps,
     DeepfakeVideoSingleRequestBodyProps,
 } from "@/lib/types/deepfake-video-single";
-import uploadAndGetUrl from "@/lib/upload-and-get-url";
+// import uploadAndGetUrl from "@/lib/upload-and-get-url";
 import { cn } from "@/lib/utils";
 import useApiKeyStore from "@/lib/zustand-states/apikey-store";
 import useDeepfakeVideoSingle from "@/lib/zustand-states/deepfake-video-single/store";
 import { useShowCodeStore } from "@/lib/zustand-states/show-code-store";
 import { CircleAlert, LoaderCircle, Waves } from "lucide-react";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const Content = () => {
@@ -169,7 +169,19 @@ const Content = () => {
     }, [apiKey]);
 
     useEffect(() => {
+        const requestBody: DeepfakeVideoSingleRequestBodyProps = {
+            key: apiKey || "apiKey",
 
+            init_video: state.init_video,
+            init_image: state.init_image,
+
+
+            base64: true,
+            webhook: null,
+            track_id: null,
+        };
+
+        setRequestData(JSON.stringify(requestBody, null, 2));
     }, [apiKey, state])
 
     async function handleSubmit() {
@@ -238,6 +250,8 @@ const Content = () => {
                 return;
             }
 
+            setResponseData(JSON.stringify(data, null, 2));
+
             if (data.status === "processing") {
                 toast.warning("Your image is processing in background.");
                 // updateResults(data.future_links);
@@ -267,7 +281,7 @@ const Content = () => {
                     }
                 };
 
-                // checkAccessibility(data.fetch_result);
+                checkAccessibility(`https://modelslab.com/api/v6/deepfake/fetch/${data.id}`);
             }
 
             setIsSubmitting(false);

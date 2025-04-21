@@ -7,7 +7,8 @@ import {
   Waves,
   Video,
   ScanFace,
-  Film
+  Film,
+  Badge
 
 } from "lucide-react";
 
@@ -35,6 +36,7 @@ type modelItem = {
   route: string;
   type: "item";
   disabled?: boolean;
+  isNew?: boolean;
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
 };
 
@@ -89,6 +91,7 @@ const models: modelGroup[] = [
         route: "/deepfake-image-multi",
         type: "item",
         icon: Film,
+        isNew: true,
       },
       {
         label: "Video Single",

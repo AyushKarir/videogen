@@ -44,7 +44,7 @@ const Content = () => {
 
     const {
         state,
-        updateKey,
+        // updateKey,
         // updateInitImage,
         // updateTargetImage,
         // updateWebhook,

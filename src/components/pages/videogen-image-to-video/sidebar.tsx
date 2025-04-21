@@ -16,14 +16,12 @@ import {
 //     AccordionItem,
 //     AccordionTrigger
 // } from "@/components/ui/accordion"
-import { ChevronDown, ChevronUp } from 'lucide-react'
+// import { ChevronDown, ChevronUp } from 'lucide-react'
 // import { cn } from "@/lib/utils";
 // import { Textarea } from "@/components/ui/textarea";
 // import useTextToImageRealtimeStore from "@/lib/zustand-states/text-to-image-realtime/store";
 import { CircleAlert } from "lucide-react";
 import React, { useState } from "react";
-
-import { Button } from "@/components/ui/button";
 
 
 
@@ -36,8 +34,7 @@ import SidebarWrapper from "@/components/wrappers/sidebar-wrapper";
 
 const Sidebar = () => {
 
-    const [isAdditionalSettingsOpen, setIsAdditionalSettingsOpen] =
-        useState(false);
+
 
     // const [duration, setDuration] = useState("5")
 

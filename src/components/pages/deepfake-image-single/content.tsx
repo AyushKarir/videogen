@@ -44,12 +44,12 @@ const Content = () => {
 
     const {
         state,
-        updateKey,
-        updateInitImage,
-        updateTargetImage,
-        updateReferenceImage,
-        updateWebhook,
-        updateTrackId,
+        // updateKey,
+        // updateInitImage,
+        // updateTargetImage,
+        // updateReferenceImage,
+        // updateWebhook,
+        // updateTrackId,
         updateResults,
         updateEta
     } = useDeepfakeImageSingle();
