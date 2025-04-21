@@ -50,7 +50,7 @@ const Sidebar = () => {
         updateShiftScale,
         updateNegPrompt,
         updateResolution,
-        // updateOutputFile,
+        updateOutputFile,
         updateDuration,
         updateModel } = useVideogenTextToVideo();
 
@@ -106,7 +106,7 @@ const Sidebar = () => {
                 <div className="space-y-3 px-2">
                     <Label>Model</Label>
                     <Select value={state.model} onValueChange={(value) => updateModel(value)}>
-                        <SelectTrigger className="w-[180px]">
+                        <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select a Model" />
                         </SelectTrigger>
                         <SelectContent>
@@ -173,7 +173,18 @@ const Sidebar = () => {
                 </div>
 
 
-
+                <div className="space-y-2 px-2">
+                    <label className="block text-sm font-medium">Output File</label>
+                    <Tabs
+                        onValueChange={updateOutputFile}
+                        value={state.output_file}
+                        defaultValue="mp4" className="w-full">
+                        <TabsList className="grid grid-cols-2 w-full">
+                            <TabsTrigger value="mp4">mp4</TabsTrigger>
+                            <TabsTrigger value="gif">gif</TabsTrigger>
+                        </TabsList>
+                    </Tabs>
+                </div>
 
 
 
@@ -331,18 +342,7 @@ const Sidebar = () => {
                             </div>
                         </div>
 
-                        <div className="space-y-2 px-2">
-                            <label className="block text-sm font-medium">Output File</label>
-                            <Tabs
-                                onValueChange={updateModel}
-                                value={state.model}
-                                defaultValue="mp4" className="w-full">
-                                <TabsList className="grid grid-cols-2 w-full">
-                                    <TabsTrigger value="mp4">mp4</TabsTrigger>
-                                    <TabsTrigger value="gif">gif</TabsTrigger>
-                                </TabsList>
-                            </Tabs>
-                        </div>
+
 
 
                     </>

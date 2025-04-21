@@ -152,7 +152,7 @@ interface Scene {
 interface VideogenState {
     key: string;
     neg_prompt: string;
-    scenes: Scene[];
+    scene: Scene[];
     output_file: string;
     // model: "mp4" | "gif";
     height: number;
@@ -180,11 +180,11 @@ const useVideogenSceneCreatorStore = create<{
     updateModel: (model: "mp4" | "gif") => void;
     updateEta: (eta: number) => void;
     updateHeight: (height: number) => void;
-    updateWeight: (width: number) => void;
+    updateWidth: (width: number) => void;
     updateTemp: (temp: boolean) => void;
     updateResults: (results: string[]) => void;
     updateResolution: (resolution: Resolution) => void;
-    getFormattedData: () => { scenes: Scene[], negative_prompt: string };
+    getFormattedData: () => { scene: Scene[], negative_prompt: string };
 
 
     updateResultHeight: (resultHeight: string) => void;
@@ -193,7 +193,7 @@ const useVideogenSceneCreatorStore = create<{
     state: {
         key: "",
         neg_prompt: "",
-        scenes: [
+        scene: [
             // Initialize with 3 empty scenes
             { prompt: "", duration: 3, negative_prompt: "" },
             { prompt: "", duration: 3, negative_prompt: "" },
@@ -220,29 +220,29 @@ const useVideogenSceneCreatorStore = create<{
     updateNegPrompt: (neg_prompt) =>
         set((state) => ({ state: { ...state.state, neg_prompt } })),
 
-    updateScenes: (scenes) =>
-        set((state) => ({ state: { ...state.state, scenes } })),
+    updateScenes: (scene) =>
+        set((state) => ({ state: { ...state.state, scene } })),
 
     addScene: (scene) =>
         set((state) => ({
             state: {
                 ...state.state,
-                scenes: [...state.state.scenes, scene],
+                scene: [...state.state.scene, scene],
             }
         })),
 
     updateScene: (index, sceneData) =>
         set((state) => {
-            const updatedScenes = [...state.state.scenes];
+            const updatedScenes = [...state.state.scene];
             updatedScenes[index] = { ...updatedScenes[index], ...sceneData };
-            return { state: { ...state.state, scenes: updatedScenes } };
+            return { state: { ...state.state, scene: updatedScenes } };
         }),
 
     deleteScene: (index) =>
         set((state) => {
-            const updatedScenes = [...state.state.scenes];
+            const updatedScenes = [...state.state.scene];
             updatedScenes.splice(index, 1);
-            return { state: { ...state.state, scenes: updatedScenes } };
+            return { state: { ...state.state, scene: updatedScenes } };
         }),
 
     updateOutputFile: (output_file) =>
@@ -263,7 +263,7 @@ const useVideogenSceneCreatorStore = create<{
     updateHeight: (height) =>
         set((state) => ({ state: { ...state.state, height } })),
 
-    updateWeight: (width) =>
+    updateWidth: (width) =>
         set((state) => ({ state: { ...state.state, width } })),
 
     updateTemp: (temp) =>
@@ -277,16 +277,17 @@ const useVideogenSceneCreatorStore = create<{
 
     // Format data for API submission
     getFormattedData: () => {
-        const { scenes, neg_prompt } = get().state;
+        const { scene, neg_prompt } = get().state;
 
-        const formattedScenes = scenes.map(scene => ({
+        const formattedScenes = scene.map(scene => ({
             prompt: scene.prompt,
-            negative_prompt: scene.negative_prompt,
+            negative_prompt: neg_prompt,
             duration: scene.duration
         }));
 
+
         return {
-            scenes: formattedScenes,
+            scene: formattedScenes,
             negative_prompt: neg_prompt
         };
     }

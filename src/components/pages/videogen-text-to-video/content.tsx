@@ -3,6 +3,7 @@
 import AvgGenTime from "@/components/avg-gen-time";
 // import Base64ImageView from "@/components/base64-image-view";
 import { useResize } from "@/components/resize-context";
+import ShowCodePanel from "@/components/show-code-panel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import GenerationLoader from "@/components/ui/generation-loader";
@@ -21,6 +22,7 @@ import {
 } from "@/lib/types/videogen-text-to-video";
 import { cn } from "@/lib/utils";
 import useApiKeyStore from "@/lib/zustand-states/apikey-store";
+import { useShowCodeStore } from "@/lib/zustand-states/show-code-store";
 // import useTextToImageRealtimeStore from "@/lib/zustand-states/text-to-image-realtime/store";
 import useVideogenTextToVideo from "@/lib/zustand-states/videogen-text-to-video/store";
 import { CircleAlert, LoaderCircle, Zap } from "lucide-react";
@@ -58,6 +60,9 @@ const Content = () => {
 
     const { screenWidth } = useResize();
     const { apiKey } = useApiKeyStore();
+    const { showCode } = useShowCodeStore();
+    const [requestData, setRequestData] = useState("");
+    const [responseData, setResponseData] = useState("");
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -68,6 +73,36 @@ const Content = () => {
             setIsAuthenticated(true);
         }
     }, [apiKey]);
+
+    useEffect(() => {
+        const requestBody: VideogenTextToVideoRequestBodyProps = {
+            key: apiKey || "apiKey",
+            prompt: state.prompt,
+            negative_prompt: state.neg_prompt,
+
+            // safety_checker: false,
+            // seed: null,
+            webhook: null,
+            track_id: null,
+            model_id: state.model,
+
+            height: state.height,
+            width: state.width,
+            num_frames: state.num_frames,
+            num_inference_steps: state.num_inference_steps,
+            guidance_scale: state.guidance_scale,
+            upscale_height: state.upscale_height,
+            upscale_width: state.upscale_width,
+            upscale_strength: state.upscale_strength,
+            upscale_guidance_scale: state.upscale_guidance_scale,
+            upscale_num_inference_steps: state.upscale_num_inference_steps,
+            output_type: state.output_file,
+
+        };
+        setRequestData(JSON.stringify(requestBody, null, 2));
+    }, [state, apiKey]);
+
+
 
     async function handleSubmit() {
         setIsSubmitting(true);
@@ -95,8 +130,8 @@ const Content = () => {
             track_id: null,
             model_id: state.model,
 
-            height: state.upscale_height,
-            width: state.upscale_width,
+            height: state.height,
+            width: state.width,
             num_frames: state.num_frames,
             num_inference_steps: state.num_inference_steps,
             guidance_scale: state.guidance_scale,
@@ -129,6 +164,8 @@ const Content = () => {
 
             const data: VideogenTextToVideoResponseProps = await response.json();
 
+            const { id } = data;
+
             if (data.status === "error") {
                 toast.error(data.message);
                 setIsSubmitting(false);
@@ -136,26 +173,29 @@ const Content = () => {
             }
 
             if (data.status === "success") {
-                toast.success("Image generated successfully");
-                updateResults(data.output);
+                toast.success("Video generated successfully");
+                // updateResults(data.output);
                 updateUpscaleHeight(data.meta.height);
                 updateUpscaleWidth(data.meta.width);
                 updateEta(data.generationTime);
             }
 
             if (data.status === "failed") {
-                toast.error(data.message || "failed to generate image");
+                toast.error(data.message || "failed to generate video");
                 setIsProcessing(false);
                 return;
             }
+            setResponseData(JSON.stringify(data, null, 2));
 
             if (data.status === "processing") {
-                toast.warning("Your image is processing in background.");
+                toast.warning("Your video is processing in background.");
                 // updateResults(data.future_links);
                 setIsProcessing(true);
                 updateEta(data.eta);
                 updateUpscaleHeight(data.meta.height);
                 updateUpscaleWidth(data.meta.width);
+
+
 
                 const checkAccessibility = async (url: string) => {
                     try {
@@ -168,6 +208,7 @@ const Content = () => {
                         });
                         const result = await response.json();
                         if (result.status === "success") {
+                            updateResults(data.output || []);
                             updateResults(data.future_links);
                             setIsProcessing(false);
                         } else if (result.status === "failed") {
@@ -182,6 +223,8 @@ const Content = () => {
                 };
 
                 checkAccessibility(data.fetch_result);
+
+
             }
 
             setIsSubmitting(false);
@@ -278,7 +321,7 @@ const Content = () => {
                                     <GenerationLoader />
                                     <p className="text-sm">
                                         {isProcessing
-                                            ? "Image is processing in background..."
+                                            ? "Video is processing in background..."
                                             : "Generating..."}
                                     </p>
                                 </div>
@@ -315,6 +358,22 @@ const Content = () => {
                         </div>
                     </div>
                 </ResizablePanel>
+
+                {showCode && (
+                    <>
+                        {screenWidth > 768 && (
+                            <ResizableHandle withHandle className="bg-transparent" />
+                        )}
+                        <ShowCodePanel
+                            apiEndpoint="https://modelslab.com/api/v6/video/text2video"
+                            isLoading={isSubmitting}
+                            request={requestData}
+                            response={responseData}
+                        />
+                    </>
+                )}
+
+
             </ResizablePanelGroup>
 
             <div className="mx-1 flex gap-2 flex-col">

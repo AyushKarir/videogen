@@ -14,7 +14,7 @@ export type VideogenSceneCreatorResponse = {
         num_frames?: number;
         num_inference_steps?: number;
         output_type?: string;
-        scenes?: {
+        scene?: {
             duration: number;
             negative_prompt: string;
             prompt: string;
@@ -49,7 +49,7 @@ export type VideogenSceneCreatorResponse = {
 
 export type VideogenSceneCreatorRequestBodyProps = {
     key: string;
-    scenes: {
+    scene: {
         prompt: string;
         negative_prompt: string;
         duration: number;

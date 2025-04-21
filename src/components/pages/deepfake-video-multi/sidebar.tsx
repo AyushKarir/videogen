@@ -30,6 +30,10 @@ import React, { useState } from "react";
 import useVideogenImageToVideoStore from "@/lib/zustand-states/videogen-image-to-video/store";
 import { Input } from "@/components/ui/input";
 import convertToBase64 from "@/lib/convert-to-base-64";
+import uploadAndGetUrl from "@/lib/upload-and-get-url";
+import useApiKeyStore from "@/lib/zustand-states/apikey-store";
+import useDeepfakeVideoMulti from "@/lib/zustand-states/deepfake-video-multi/store";
+import ReactPlayer from "react-player";
 
 
 
@@ -40,31 +44,91 @@ const Sidebar = () => {
 
 
     // const { screenWidth } = useResize();
+    const { apiKey } = useApiKeyStore();
 
     const [preview, setPreview] = useState<string | null>(null);
 
+    const [ytLink, setYtLink] = useState("");
+    const [videoPreviewVideo, setVideoPreviewVideo] = useState<string | null>(
+        null
+    );
 
 
-    const { updateInitImage, } = useVideogenImageToVideoStore();
+    const [previewReference, setPreviewReference] = useState<string | null>(null);
+    const [previewTarget, setPreviewTarget] = useState<string | null>(null);
 
-    const handleImageChange = async (
+    const [refImageURL, setRefImageURL] = useState<string | null>("");
+
+
+    const { updateInitImage, updateInitVideo, updateReferenceImage } = useDeepfakeVideoMulti();
+
+    const handleVideoChange = async (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
         const file = event.target.files?.[0];
 
         if (file) {
-            const base64 = await convertToBase64(file);
-            updateInitImage(base64 as string);
+            const base64 = await convertToBase64(file) as string;
+            const imageUrl = await uploadAndGetUrl(apiKey || 'apikey', base64);
+
+            updateInitVideo(imageUrl.link as string);
+        }
+
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setVideoPreviewVideo(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            setVideoPreviewVideo(null);
+        }
+    };
+
+
+    const handleReferenceImageChange = async (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const file = event.target.files?.[0];
+
+        if (file) {
+            const base64 = await convertToBase64(file) as string;
+            const imageUrl = await uploadAndGetUrl(apiKey || 'apikey', base64);
+
+            updateReferenceImage(imageUrl.link as string);
+        }
+
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewReference(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            setPreviewReference(null);
+        }
+    };
+    const handleTargetImageChange = async (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const file = event.target.files?.[0];
+
+        if (file) {
+            const base64 = await convertToBase64(file) as string;
+            const imageUrl = await uploadAndGetUrl(apiKey || 'apikey', base64);
+            updateInitImage(imageUrl.link as string);
         }
 
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setPreview(reader.result as string);
+                setPreviewTarget(reader.result as string);
             };
             reader.readAsDataURL(file);
         } else {
-            setPreview(null);
+            setPreviewTarget(null);
         }
     };
 
@@ -101,27 +165,69 @@ const Sidebar = () => {
                     </Label>
                     <Input
                         type="file"
-                        accept="image/*"
-                        name="image"
-                        onChange={handleImageChange}
+                        accept="video/*"
+                        name="video"
+                        onChange={handleVideoChange}
                         className="w-fit"
                     />
-                    {preview && (
-                        <Image
-                            height={512}
-                            width={512}
-                            src={preview}
-                            alt="Selected preview"
-                            className="mx-auto mt-2 rounded-lg"
-                        />
+
+                    {ytLink.length <= 0 && (
+                        <>
+                            {videoPreviewVideo && (
+                                <div className="mt-4 max-w-full mb-5 w-auto rounded-md h-32 m-auto">
+                                    <ReactPlayer
+                                        url={videoPreviewVideo}
+                                        controls
+                                        width="100%"
+                                        height="100%"
+                                        playing={false}
+                                        className=""
+                                    />
+                                </div>
+                            )}
+                        </>
+
                     )}
 
                     <center>or</center>
 
-                    <Input type="text" className="mx-auto rounded-lg" placeholder="Enter youtube video link" />
+                    <Input type="text"
+                        onChange={(e) => setYtLink(e.target.value)}
+                        value={ytLink}
+                        className="mx-auto rounded-lg" placeholder="Enter youtube video link" />
 
                 </div>
 
+
+                <div className="space-y-3">
+                    <Label className="flex gap-2 items-center">
+                        Upload Target Image
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <CircleAlert className="text-muted-foreground size-4" />
+                            </TooltipTrigger>
+                            <TooltipContent side="right">
+                                <p>Upload an image to use for face swapping.</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </Label>
+                    <Input
+                        type="file"
+                        accept="image/*"
+                        name="image"
+                        onChange={handleTargetImageChange}
+                        className="w-fit"
+                    />
+                    {previewTarget && (
+                        <Image
+                            height={512}
+                            width={512}
+                            src={previewTarget}
+                            alt="Selected preview"
+                            className="mx-auto mt-2 rounded-lg"
+                        />
+                    )}
+                </div>
 
 
 
@@ -142,7 +248,7 @@ const Sidebar = () => {
                         type="file"
                         accept="image/*"
                         name="image"
-                        onChange={handleImageChange}
+                        onChange={handleReferenceImageChange}
                         className="w-fit"
                     />
                     {preview && (

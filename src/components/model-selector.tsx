@@ -162,10 +162,10 @@ export default function ModelSelector() {
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="md:min-w-[300px] p-0">
+      <PopoverContent className="md:min-w-[300px] border p-0">
         <Command>
           <CommandInput placeholder="Search model..." />
-          <CommandList>
+          <CommandList className="max-h-[80vh]">
             <CommandEmpty>No model found.</CommandEmpty>
             {models.map((group) => (
               <CommandGroup
@@ -185,9 +185,19 @@ export default function ModelSelector() {
                       setOpen(false);
                       router.push(model.route);
                     }}
+                    className={cn(model.route === pathname && "bg-primary/30")}
                   >
-                    <model.icon className={cn("mr-1 h-4 w-4")} />
-                    {model.label}
+                    {model.route === pathname ? (
+                      <CheckCheck className={cn("mr-1 h-4 w-4")} />
+                    ) : (
+                      <model.icon className={cn("mr-1 h-4 w-4")} />
+                    )}
+                    {model.label}{" "}
+                    {model.isNew && (
+                      <Badge className="pointer-events-none text-xs rounded-full bg-foreground">
+                        New
+                      </Badge>
+                    )}
                   </CommandItem>
                 ))}
                 <CommandSeparator className="mt-1" />

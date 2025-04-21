@@ -64,8 +64,8 @@ export type VideogenTextToVideoRequestBodyProps = {
     model_id: string;
     prompt: string;
     negative_prompt: string;
-    height: number;
-    width: number;
+    height: string;
+    width: string;
     num_frames: number;
     num_inference_steps: number;
     guidance_scale: number;

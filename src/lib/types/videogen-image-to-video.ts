@@ -35,7 +35,7 @@ export type VideogenImageToVideoResponseProps = {
 }
 
 export type VideogenImageToVideoRequestBodyProps = {
-    key: string;
+    key: string | null;
     model_id: string;
     init_image: string;
     height: number;
@@ -49,4 +49,7 @@ export type VideogenImageToVideoRequestBodyProps = {
     webhook: string | null;
     track_id: string | null;
 
+    base64: string | boolean;
+
+    output_type: string | null;
 }

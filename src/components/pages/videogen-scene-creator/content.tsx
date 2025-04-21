@@ -3,12 +3,15 @@
 import AvgGenTime from "@/components/avg-gen-time";
 // import Base64ImageView from "@/components/base64-image-view";
 import { useResize } from "@/components/resize-context";
+import ShowCodePanel from "@/components/show-code-panel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import GenerationLoader from "@/components/ui/generation-loader";
 import {
+    ResizableHandle,
     // ResizableHandle,
     ResizablePanel,
+    ResizablePanelGroup,
     // ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -21,6 +24,7 @@ import {
 } from "@/lib/types/videogen-scene-creator";
 import { cn } from "@/lib/utils";
 import useApiKeyStore from "@/lib/zustand-states/apikey-store";
+import { useShowCodeStore } from "@/lib/zustand-states/show-code-store";
 import useVideogenSceneCreatorStore from "@/lib/zustand-states/videogen-scene-creator/store";
 import { CircleAlert, LoaderCircle, Waves } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -52,6 +56,9 @@ const Content = () => {
 
     const { screenWidth } = useResize();
     const { apiKey } = useApiKeyStore();
+    const { showCode } = useShowCodeStore();
+    const [requestData, setRequestData] = useState("");
+    const [responseData, setResponseData] = useState("");
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -67,6 +74,24 @@ const Content = () => {
         }
     }, [apiKey]);
 
+    useEffect(() => {
+        const formattedData = getFormattedData();
+        const requestBody: VideogenSceneCreatorRequestBodyProps = {
+            key: apiKey,
+            scene: formattedData.scene,
+            negative_prompt: formattedData.negative_prompt,
+            height: state.height || 480,
+            width: state.width || 640,
+            safety_checker: false,
+            seed: null,
+            base64: true,
+            webhook: null,
+            track_id: null,
+        };
+        setRequestData(JSON.stringify(requestBody, null, 2));
+    }, [state, apiKey])
+
+
     async function handleSubmit() {
         setIsSubmitting(true);
 
@@ -76,13 +101,13 @@ const Content = () => {
             return;
         }
 
-        if (!state.scenes || state.scenes.length === 0) {
+        if (!state.scene || state.scene.length === 0) {
             toast.error("Please provide at least one scene.");
             setIsSubmitting(false);
             return;
         }
 
-        for (const scene of state.scenes) {
+        for (const scene of state.scene) {
             if (!scene.prompt || scene.prompt.trim().length === 0) {
                 toast.error("Each scene must have a prompt.");
                 setIsSubmitting(false);
@@ -99,7 +124,7 @@ const Content = () => {
 
         const requestBody: VideogenSceneCreatorRequestBodyProps = {
             key: apiKey,
-            scenes: formattedData.scenes,
+            scene: formattedData.scene,
             negative_prompt: formattedData.negative_prompt,
             height: state.height || 480,
             width: state.width || 640,
@@ -150,7 +175,7 @@ const Content = () => {
                 setIsProcessing(false);
                 return;
             }
-
+            setResponseData(JSON.stringify(data, null, 2));
             if (data.status === "processing") {
                 toast.warning("Your image is processing in background.");
                 // updateResults(data.future_links);
@@ -227,70 +252,90 @@ const Content = () => {
                 subHeading=" Click on 'View Demo' to watch a tutorial video and see
             how it works."
             />
-            <ResizablePanel
-                defaultSize={50}
-                minSize={30}
-                className={cn(
-                    "p-1",
-                    screenWidth > 768 ? "pl-2" : "!overflow-visible pt-2"
-                )}
+            <ResizablePanelGroup
+                direction={screenWidth > 768 ? "horizontal" : "vertical"}
+                className="rounded-lg"
             >
-                <div
+                <ResizablePanel
+                    defaultSize={50}
+                    minSize={30}
                     className={cn(
-                        "relative h-full border border-border rounded-md",
-                        screenWidth < 768 ? "min-h-96" : ""
+                        "p-1",
+                        screenWidth > 768 ? "pl-2" : "!overflow-visible pt-2"
                     )}
                 >
-                    <Badge
-                        variant={"outline"}
-                        className="bg-background z-10 absolute top-2 left-2"
+                    <div
+                        className={cn(
+                            "relative h-full border border-border rounded-md",
+                            screenWidth < 768 ? "min-h-96" : ""
+                        )}
                     >
-                        Result
-                    </Badge>
-                    <AvgGenTime eta={state.eta} />
-                    <div className="h-full">
-                        {(isSubmitting || isProcessing) && (
-                            <div className="flex items-center justify-center flex-col gap-2 h-full">
-                                <GenerationLoader />
-                                <p className="text-sm">
-                                    {isProcessing
-                                        ? "Video is processing in background..."
-                                        : "Generating..."}
-                                </p>
-                            </div>
-                        )}
-                        {state.results.length > 0 && (
-                            <ScrollArea className="flex flex-wrap rounded-lg h-full p-3 gap-3 pt-10">
-                                <div
-                                    className={cn(
-                                        "flex flex-wrap gap-2 p-2 pt-10 justify-center items-center h-full rounded-lg"
-                                    )}
-                                >
-                                    {state.results.map((result, index) => (
-                                        // <Base64ImageView
-                                        //     className={
-                                        //         state.results.length > 1 ? "w-[40%]" : "w-full"
-                                        //     }
-                                        //     key={index}
-                                        //     imgUrl={result}
-                                        //     height={resultHeight}
-                                        //     width={resultWidth}
-                                        // />
-
-                                        <VideoView
-                                            className={state.results.length > 1 ? "w-[40%]" : "w-full"}
-                                            key={index}
-                                            videoUrl={result}
-                                            height={state.height}
-                                            width={state.width}
-                                        />
-                                    ))}
+                        <Badge
+                            variant={"outline"}
+                            className="bg-background z-10 absolute top-2 left-2"
+                        >
+                            Result
+                        </Badge>
+                        <AvgGenTime eta={state.eta} />
+                        <div className="h-full">
+                            {(isSubmitting || isProcessing) && (
+                                <div className="flex items-center justify-center flex-col gap-2 h-full">
+                                    <GenerationLoader />
+                                    <p className="text-sm">
+                                        {isProcessing
+                                            ? "Video is processing in background..."
+                                            : "Generating..."}
+                                    </p>
                                 </div>
-                            </ScrollArea>
-                        )}
+                            )}
+                            {state.results.length > 0 && (
+                                <ScrollArea className="flex flex-wrap rounded-lg h-full p-3 gap-3 pt-10">
+                                    <div
+                                        className={cn(
+                                            "flex flex-wrap gap-2 p-2 pt-10 justify-center items-center h-full rounded-lg"
+                                        )}
+                                    >
+                                        {state.results.map((result, index) => (
+                                            // <Base64ImageView
+                                            //     className={
+                                            //         state.results.length > 1 ? "w-[40%]" : "w-full"
+                                            //     }
+                                            //     key={index}
+                                            //     imgUrl={result}
+                                            //     height={resultHeight}
+                                            //     width={resultWidth}
+                                            // />
+
+                                            <VideoView
+                                                className={state.results.length > 1 ? "w-[40%]" : "w-full"}
+                                                key={index}
+                                                videoUrl={result}
+                                                height={state.height}
+                                                width={state.width}
+                                            />
+                                        ))}
+                                    </div>
+                                </ScrollArea>
+                            )}
+                        </div>
                     </div>
-                </div>
-            </ResizablePanel>
+                </ResizablePanel>
+
+                {showCode && (
+                    <>
+                        {screenWidth > 768 && (
+                            <ResizableHandle withHandle className="bg-transparent" />
+                        )}
+                        <ShowCodePanel
+                            apiEndpoint="https://modelslab.com/api/v6/video/scene_maker"
+                            isLoading={isSubmitting}
+                            request={requestData}
+                            response={responseData}
+                        />
+                    </>
+                )}
+
+            </ResizablePanelGroup>
 
             <div className="mx-1 flex gap-2 flex-col">
                 {!isAuthenticated && (

@@ -17,6 +17,7 @@ interface VideogenImagetoVideoState {
 
     results: string[];
     eta: number;
+    output_type: string | null;
 
 }
 
@@ -35,6 +36,7 @@ const useVideogenImageToVideoStore = create<{
     updateNoiseAugStrength: (noise_aug_strength: number) => void;
     updateWebhook: (webhook: string | null) => void;
     updateTrackId: (track_id: string | null) => void;
+    updateOutputType: (output_type: string | null) => void;
 
     updateResults: (results: string[]) => void;
     updateEta: (eta: number) => void;
@@ -50,9 +52,10 @@ const useVideogenImageToVideoStore = create<{
         min_guidance_scale: 1,
         max_guidance_scale: 3,
         motion_bucket_id: 20,
-        noise_aug_strength: 0.02,
+        noise_aug_strength: 0.7,
         webhook: null,
         track_id: null,
+        output_type: "mp4",
 
         results: [],
         eta: 20,
@@ -76,6 +79,9 @@ const useVideogenImageToVideoStore = create<{
     updateWebhook: (webhook) => set((state) => ({ state: { ...state.state, webhook } })),
     updateTrackId: (track_id) => set((state) => ({ state: { ...state.state, track_id } })),
 
+
+
+    updateOutputType: (output_type) => set((state) => ({ state: { ...state.state, output_type } })),
 
     updateResults: (results) =>
         set((state) => ({ state: { ...state.state, results } })),

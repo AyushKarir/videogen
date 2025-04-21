@@ -119,6 +119,7 @@ const VideoView = ({ videoUrl, height, width, className }: Props) => {
                 />
             )}
 
+
             <div className="absolute top-1 right-1 flex gap-1">
                 <Button
                     variant={"outline"}

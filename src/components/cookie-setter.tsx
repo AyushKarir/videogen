@@ -16,7 +16,7 @@ const CookieSetter = () => {
     const key = params.get("key");
 
     if (key) {
-      setCookie("apiKney", key);
+      setCookie("apiKey", key);
       updateApiKey(key);
       router.push(pathname);
     } else {

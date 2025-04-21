@@ -11,6 +11,7 @@ interface videogenState {
     duration: string;
     output_file: string;
     height: string;
+    width: string;
 
     prompt: string;
     num_frames: number;
@@ -60,8 +61,9 @@ const useVideogenTextToVideo = create<{
         resolution: "landscape", //default resoltiion
         model: "cogvideox",  // Default model
         duration: "5",
-        output_file: "",
+        output_file: "mp4",
         height: "512",
+        width: "512",
 
         prompt: "",
         num_frames: 25,
@@ -75,6 +77,7 @@ const useVideogenTextToVideo = create<{
         eta: 20,
         webhook: null,
         track_id: null,
+
     },
     updateKey: (key) => set((state) => ({ state: { ...state.state, key } })),
     updateNegPrompt: (neg_prompt) =>

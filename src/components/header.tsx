@@ -16,11 +16,27 @@ import {
 import UserTokens from "./user-tokens";
 import { cn } from "@/lib/utils";
 import useApiKeyStore from "@/lib/zustand-states/apikey-store";
+import { useShowCodeStore } from "@/lib/zustand-states/show-code-store";
+import { useTitleStore } from "@/lib/zustand-states/title-store";
+import { usePathname } from "next/navigation";
 
 const Header = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const { showCode, toggleShowCode } = useShowCodeStore();
+
   const { apiKey } = useApiKeyStore();
+  const { title, setTitle } = useTitleStore();
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setTitle("Videogen");
+  }, [pathname]);
+
+  useEffect(() => {
+    document.title = `${title} playground`;
+  }, [title]);
 
   useEffect(() => {
     if (apiKey) {
@@ -31,7 +47,7 @@ const Header = () => {
   return (
     <div className="flex bg-background/70 backdrop-blur-md justify-between items-center px-2 sm:px-5 py-3 gap-1 border-b border-border top-0 w-full z-50 sticky">
       <div className="flex items-center gap-1 sm:gap-2">
-        <Link href={"/"} className="h-9 w-9">
+        <Link href={"https://modelslab.com"} className="h-9 w-9">
           <Logo />
         </Link>
         <Link
@@ -44,7 +60,7 @@ const Header = () => {
           <HomeIcon />
         </Link>
         <Link
-          href={"/"}
+          href={"/playgrounds"}
           className={cn(
             buttonVariants({ variant: "secondary" }),
             "hidden sm:block"
@@ -54,8 +70,11 @@ const Header = () => {
         </Link>
         <ModelSelector />
       </div>
-      <h3 className="font-bold hidden lg:block">VideoFusion Playground</h3>
+      <h3 className="font-bold hidden lg:block">{title} Playground</h3>
       <div className="flex items-center gap-1 sm:gap-3">
+        <Button className="sm:flex hidden" onClick={toggleShowCode}>
+          {showCode ? "Hide" : "Show"} API
+        </Button>
         <ModeToggle />
         {isAuthenticated && <UserTokens />}
 

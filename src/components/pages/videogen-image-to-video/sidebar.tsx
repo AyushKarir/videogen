@@ -30,6 +30,7 @@ import { Button } from "@/components/ui/button";
 import useVideogenImageToVideoStore from "@/lib/zustand-states/videogen-image-to-video/store";
 import { Input } from "@/components/ui/input";
 import convertToBase64 from "@/lib/convert-to-base-64";
+import SidebarWrapper from "@/components/wrappers/sidebar-wrapper";
 
 
 
@@ -47,7 +48,7 @@ const Sidebar = () => {
 
 
 
-    const { state, updateInitImage, updateModelId } = useVideogenImageToVideoStore();
+    const { state, updateInitImage, updateOutputType } = useVideogenImageToVideoStore();
 
     // const samples = [
     //     {
@@ -114,76 +115,42 @@ const Sidebar = () => {
     };
 
     return (
-        <ScrollArea className="h-full px-2 sm:px-4">
-            <form className="space-y-5 py-2  sm:py-4" action="">
+        <SidebarWrapper>
+            <ScrollArea className="h-full px-2 sm:px-4">
+                <form className="space-y-5 py-2  sm:py-4" action="">
 
 
 
 
-                <div className="space-y-3">
-                    <Label className="flex gap-2 items-center">
-                        Upload Sketch
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <CircleAlert className="text-muted-foreground size-4" />
-                            </TooltipTrigger>
-                            <TooltipContent side="right">
-                                <p>Upload a initial sketch.</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </Label>
-                    <Input
-                        type="file"
-                        accept="image/*"
-                        name="image"
-                        onChange={handleImageChange}
-                        className="w-fit"
-                    />
-                    {preview && (
-                        <Image
-                            height={512}
-                            width={512}
-                            src={preview}
-                            alt="Selected preview"
-                            className="mx-auto mt-2 rounded-lg"
+                    <div className="space-y-3">
+                        <Label className="flex gap-2 items-center">
+                            Upload Sketch
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <CircleAlert className="text-muted-foreground size-4" />
+                                </TooltipTrigger>
+                                <TooltipContent side="right">
+                                    <p>Upload a initial sketch.</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </Label>
+                        <Input
+                            type="file"
+                            accept="image/*"
+                            name="image"
+                            onChange={handleImageChange}
+                            className="w-full"
                         />
-                    )}
-                </div>
-
-
-
-
-
-
-
-
-
-                <div className="space-y-3">
-                    <Label className="flex gap-2 items-center">Additional Settings</Label>
-
-                    <Button
-                        variant={"outline"}
-                        type="button"
-                        onClick={() => {
-                            setIsAdditionalSettingsOpen((prev) => !prev);
-                        }}
-                    >
-                        {isAdditionalSettingsOpen ? (
-                            <>
-                                <ChevronUp />
-                                Less
-                            </>
-                        ) : (
-                            <>
-                                <ChevronDown />
-                                More
-                            </>
+                        {preview && (
+                            <Image
+                                height={512}
+                                width={512}
+                                src={preview}
+                                alt="Selected preview"
+                                className="mx-auto mt-2 rounded-lg"
+                            />
                         )}
-                    </Button>
-                </div>
-
-                {isAdditionalSettingsOpen && (
-                    <>
+                    </div>
 
 
 
@@ -191,26 +158,36 @@ const Sidebar = () => {
 
 
 
-                        <div className="space-y-2 px-2">
-                            <label className="block text-sm font-medium">Output File</label>
-                            <Tabs
-                                onValueChange={updateModelId}
-                                value={state.model_id}
-                                defaultValue="mp4" className="w-full">
-                                <TabsList className="grid grid-cols-2 w-full">
-                                    <TabsTrigger value="mp4">mp4</TabsTrigger>
-                                    <TabsTrigger value="gif">gif</TabsTrigger>
-                                </TabsList>
-                            </Tabs>
-                        </div>
 
 
-                    </>
 
-                )}
 
-            </form>
-        </ScrollArea>
+
+
+
+
+
+
+
+                    <div className="space-y-2 px-2">
+                        <label className="block text-sm font-medium">Output File</label>
+                        <Tabs
+                            onValueChange={updateOutputType}
+                            value={state.output_type}
+                            defaultValue="mp4" className="w-full">
+                            <TabsList className="grid grid-cols-2 w-full">
+                                <TabsTrigger value="mp4">mp4</TabsTrigger>
+                                <TabsTrigger value="gif">gif</TabsTrigger>
+                            </TabsList>
+                        </Tabs>
+                    </div>
+
+
+
+
+                </form>
+            </ScrollArea>
+        </SidebarWrapper>
     );
 };
 

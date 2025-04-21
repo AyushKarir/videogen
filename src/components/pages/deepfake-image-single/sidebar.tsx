@@ -27,9 +27,13 @@ import React, { useState } from "react";
 
 
 
-import useVideogenImageToVideoStore from "@/lib/zustand-states/videogen-image-to-video/store";
+// import useVideogenImageToVideoStore from "@/lib/zustand-states/videogen-image-to-video/store";
 import { Input } from "@/components/ui/input";
 import convertToBase64 from "@/lib/convert-to-base-64";
+import useDeepfakeImageSingle from "@/lib/zustand-states/deepfake-image-single/store";
+import PreviousMap_ from "postcss/lib/previous-map";
+import uploadAndGetUrl from "@/lib/upload-and-get-url";
+import useApiKeyStore from "@/lib/zustand-states/apikey-store";
 
 
 
@@ -44,11 +48,13 @@ const Sidebar = () => {
 
     // const { screenWidth } = useResize();
 
-    const [preview, setPreview] = useState<string | null>(null);
+    const [previewInit, setPreviewInit] = useState<string | null>(null);
+    const [previewReference, setPreviewReference] = useState<string | null>(null);
+    const [previewTarget, setPreviewTarget] = useState<string | null>(null);
 
+    const { apiKey } = useApiKeyStore();
 
-
-    const { updateInitImage, } = useVideogenImageToVideoStore();
+    const { updateInitImage, updateReferenceImage, updateTargetImage } = useDeepfakeImageSingle();
 
     // const samples = [
     //     {
@@ -93,24 +99,75 @@ const Sidebar = () => {
     // };
     // console.log("model " + state.model, "duaration " + state.duration, "guidance " + state.guidance_scale, "output " + state.output_file, "prompt " + state.neg_prompt, "resolutions " + state.resolution);
 
-    const handleImageChange = async (
+    const handleInitImageChange = async (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
         const file = event.target.files?.[0];
 
         if (file) {
-            const base64 = await convertToBase64(file);
-            updateInitImage(base64 as string);
+
+            const base64 = await convertToBase64(file) as string;
+            const imageUrl = await uploadAndGetUrl(apiKey || 'apikey', base64);
+
+            updateInitImage(imageUrl.link as string);
+
         }
 
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setPreview(reader.result as string);
+                setPreviewInit(reader.result as string);
             };
             reader.readAsDataURL(file);
         } else {
-            setPreview(null);
+            setPreviewInit(null);
+        }
+    };
+
+    const handleReferenceImageChange = async (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const file = event.target.files?.[0];
+
+        if (file) {
+
+            const base64 = await convertToBase64(file) as string;
+            const imageUrl = await uploadAndGetUrl(apiKey || 'apikey', base64);
+
+            updateReferenceImage(imageUrl.link as string);
+        }
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewReference(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            setPreviewReference(null);
+        }
+    };
+    const handleTargetImageChange = async (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const file = event.target.files?.[0];
+
+        if (file) {
+
+            const base64 = await convertToBase64(file) as string;
+            const imageUrl = await uploadAndGetUrl(apiKey || 'apikey', base64);
+
+            updateTargetImage(imageUrl.link as string);
+        }
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewTarget(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            setPreviewTarget(null);
         }
     };
 
@@ -153,14 +210,14 @@ const Sidebar = () => {
                         type="file"
                         accept="image/*"
                         name="image"
-                        onChange={handleImageChange}
+                        onChange={handleInitImageChange}
                         className="w-fit"
                     />
-                    {preview && (
+                    {previewInit && (
                         <Image
                             height={512}
                             width={512}
-                            src={preview}
+                            src={previewInit}
                             alt="Selected preview"
                             className="mx-auto mt-2 rounded-lg"
                         />
@@ -184,14 +241,14 @@ const Sidebar = () => {
                         type="file"
                         accept="image/*"
                         name="image"
-                        onChange={handleImageChange}
+                        onChange={handleTargetImageChange}
                         className="w-fit"
                     />
-                    {preview && (
+                    {previewTarget && (
                         <Image
                             height={512}
                             width={512}
-                            src={preview}
+                            src={previewTarget}
                             alt="Selected preview"
                             className="mx-auto mt-2 rounded-lg"
                         />
@@ -215,14 +272,14 @@ const Sidebar = () => {
                         type="file"
                         accept="image/*"
                         name="image"
-                        onChange={handleImageChange}
+                        onChange={handleReferenceImageChange}
                         className="w-fit"
                     />
-                    {preview && (
+                    {previewReference && (
                         <Image
                             height={512}
                             width={512}
-                            src={preview}
+                            src={previewReference}
                             alt="Selected preview"
                             className="mx-auto mt-2 rounded-lg"
                         />
