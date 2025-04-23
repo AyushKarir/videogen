@@ -14,7 +14,7 @@ import {
 
 } from "@/components/ui/resizable";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import VideoView from "@/components/video-view";
+// import VideoView from "@/components/video-view";
 // import { Textarea } from "@/components/ui/textarea";
 import ViewDemo from "@/components/view-demo";
 import { textTo3DRequestBodyProps, textTo3DResponseProps } from "@/lib/types/text-to-3d";
