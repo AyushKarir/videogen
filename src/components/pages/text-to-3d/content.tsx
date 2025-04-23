@@ -1,6 +1,6 @@
 "use client";
 
-import AvgGenTime from "@/components/avg-gen-time";
+// import AvgGenTime from "@/components/avg-gen-time";
 import { useResize } from "@/components/resize-context";
 import ShowCodePanel from "@/components/show-code-panel";
 import { Badge } from "@/components/ui/badge";

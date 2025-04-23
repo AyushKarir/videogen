@@ -3,8 +3,7 @@
 // import ButtonRadio from "@/components/ui/button-radio";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import Image from "next/image";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import {
     Tooltip,
     TooltipContent,
@@ -21,13 +20,12 @@ import {
 // import { Textarea } from "@/components/ui/textarea";
 // import useTextToImageRealtimeStore from "@/lib/zustand-states/text-to-image-realtime/store";
 import { CircleAlert } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
 
 
 
 import useTextTo3DStore from "@/lib/zustand-states/text-to-3d/store";
-import { Input } from "@/components/ui/input";
-import convertToBase64 from "@/lib/convert-to-base-64";
+
 import SidebarWrapper from "@/components/wrappers/sidebar-wrapper";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
@@ -45,7 +43,6 @@ const Sidebar = () => {
 
     const { screenWidth } = useResize();
 
-    const [preview, setPreview] = useState<string | null>(null);
 
 
 
