@@ -34,6 +34,7 @@ import useDeepfakeImageSingle from "@/lib/zustand-states/deepfake-image-single/s
 // import PreviousMap_ from "postcss/lib/previous-map";
 import uploadAndGetUrl from "@/lib/upload-and-get-url";
 import useApiKeyStore from "@/lib/zustand-states/apikey-store";
+import SidebarWrapper from "@/components/wrappers/sidebar-wrapper";
 
 
 
@@ -172,8 +173,9 @@ const Sidebar = () => {
     };
 
     return (
-        <ScrollArea className="h-full px-2 sm:px-4">
-            <form className="space-y-5 py-2  sm:py-4" action="">
+        <SidebarWrapper>
+            <ScrollArea className="h-full px-2 sm:px-4">
+                <form className="space-y-5 py-2  sm:py-4" action="">
 
 
 
@@ -188,103 +190,103 @@ const Sidebar = () => {
 
 
 
-                <Label className="flex gap-2 items-center">Image</Label>
+                    <Label className="flex gap-2 items-center">Image</Label>
 
 
 
 
 
-                <div className="space-y-3">
-                    <Label className="flex gap-2 items-center">
-                        Upload Image
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <CircleAlert className="text-muted-foreground size-4" />
-                            </TooltipTrigger>
-                            <TooltipContent side="right">
-                                <p>Upload an image to use for face swapping.</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </Label>
-                    <Input
-                        type="file"
-                        accept="image/*"
-                        name="image"
-                        onChange={handleInitImageChange}
-                        className="w-fit"
-                    />
-                    {previewInit && (
-                        <Image
-                            height={512}
-                            width={512}
-                            src={previewInit}
-                            alt="Selected preview"
-                            className="mx-auto mt-2 rounded-lg"
+                    <div className="space-y-3">
+                        <Label className="flex gap-2 items-center">
+                            Upload Image
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <CircleAlert className="text-muted-foreground size-4" />
+                                </TooltipTrigger>
+                                <TooltipContent side="right">
+                                    <p>Upload an image to use for face swapping.</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </Label>
+                        <Input
+                            type="file"
+                            accept="image/*"
+                            name="image"
+                            onChange={handleInitImageChange}
+                            className="w-fit"
                         />
-                    )}
-                </div>
+                        {previewInit && (
+                            <Image
+                                height={512}
+                                width={512}
+                                src={previewInit}
+                                alt="Selected preview"
+                                className="mx-auto mt-2 rounded-lg"
+                            />
+                        )}
+                    </div>
 
 
-                <div className="space-y-3">
-                    <Label className="flex gap-2 items-center">
-                        Upload Target Image
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <CircleAlert className="text-muted-foreground size-4" />
-                            </TooltipTrigger>
-                            <TooltipContent side="right">
-                                <p>Upload an image to use for face swapping.</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </Label>
-                    <Input
-                        type="file"
-                        accept="image/*"
-                        name="image"
-                        onChange={handleTargetImageChange}
-                        className="w-fit"
-                    />
-                    {previewTarget && (
-                        <Image
-                            height={512}
-                            width={512}
-                            src={previewTarget}
-                            alt="Selected preview"
-                            className="mx-auto mt-2 rounded-lg"
+                    <div className="space-y-3">
+                        <Label className="flex gap-2 items-center">
+                            Upload Target Image
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <CircleAlert className="text-muted-foreground size-4" />
+                                </TooltipTrigger>
+                                <TooltipContent side="right">
+                                    <p>Upload an image to use for face swapping.</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </Label>
+                        <Input
+                            type="file"
+                            accept="image/*"
+                            name="image"
+                            onChange={handleTargetImageChange}
+                            className="w-fit"
                         />
-                    )}
-                </div>
+                        {previewTarget && (
+                            <Image
+                                height={512}
+                                width={512}
+                                src={previewTarget}
+                                alt="Selected preview"
+                                className="mx-auto mt-2 rounded-lg"
+                            />
+                        )}
+                    </div>
 
 
-                <div className="space-y-3">
-                    <Label className="flex gap-2 items-center">
-                        Upload Reference Image
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <CircleAlert className="text-muted-foreground size-4" />
-                            </TooltipTrigger>
-                            <TooltipContent side="right">
-                                <p>Upload the source image for the face to be swapped.</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </Label>
-                    <Input
-                        type="file"
-                        accept="image/*"
-                        name="image"
-                        onChange={handleReferenceImageChange}
-                        className="w-fit"
-                    />
-                    {previewReference && (
-                        <Image
-                            height={512}
-                            width={512}
-                            src={previewReference}
-                            alt="Selected preview"
-                            className="mx-auto mt-2 rounded-lg"
+                    <div className="space-y-3">
+                        <Label className="flex gap-2 items-center">
+                            Upload Reference Image
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <CircleAlert className="text-muted-foreground size-4" />
+                                </TooltipTrigger>
+                                <TooltipContent side="right">
+                                    <p>Upload the source image for the face to be swapped.</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </Label>
+                        <Input
+                            type="file"
+                            accept="image/*"
+                            name="image"
+                            onChange={handleReferenceImageChange}
+                            className="w-fit"
                         />
-                    )}
-                </div>
+                        {previewReference && (
+                            <Image
+                                height={512}
+                                width={512}
+                                src={previewReference}
+                                alt="Selected preview"
+                                className="mx-auto mt-2 rounded-lg"
+                            />
+                        )}
+                    </div>
 
 
 
@@ -301,8 +303,9 @@ const Sidebar = () => {
 
 
 
-            </form>
-        </ScrollArea>
+                </form>
+            </ScrollArea>
+        </SidebarWrapper>
     );
 };
 

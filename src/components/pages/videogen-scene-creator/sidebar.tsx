@@ -81,17 +81,19 @@ const Sidebar = () => {
                             value={sceneSc.prompt}
                             placeholder="Write a prompt for this scene"
                             className={cn(
-                                "border px-2 border-border rounded-md resize",
+                                "border px-2 border-border rounded-md resize-y",
                                 screenWidth > 768 ? "" : ""
                             )}
                         />
                     </div>
                 ))}
                 <div className="px-2">
+
                     <Button
                         type="button"
                         className="w-full"
                         onClick={handleAddScene}
+                        disabled={state.scene.length >= 5}
                     >
                         Add Scene
                     </Button>

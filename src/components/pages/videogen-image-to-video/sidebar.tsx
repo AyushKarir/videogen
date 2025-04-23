@@ -119,7 +119,7 @@ const Sidebar = () => {
 
 
 
-                    <div className="space-y-3">
+                    <div className="space-y-3 px-2">
                         <Label className="flex gap-2 items-center">
                             Upload Sketch
                             <Tooltip>

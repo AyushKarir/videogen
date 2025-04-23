@@ -117,7 +117,7 @@ const Sidebar = () => {
                 </div>
 
 
-                <div className="space-y-3">
+                <div className="space-y-3 px-2">
                     <Label className="flex gap-2 items-center">
                         Resolution
                         <Tooltip>
@@ -188,7 +188,7 @@ const Sidebar = () => {
 
 
 
-                <div className="space-y-3">
+                <div className="space-y-3 px-2">
                     <Label className="flex gap-2 items-center">Additional Settings</Label>
 
                     <Button
