@@ -8,7 +8,9 @@ import {
   Video,
   ScanFace,
   Film,
-  Badge
+  Badge,
+  Scale3d,
+  TextCursorInput, Image, Box
 
 } from "lucide-react";
 
@@ -104,6 +106,31 @@ const models: modelGroup[] = [
         route: "/deepfake-video-multi",
         type: "item",
         icon: Film,
+      },
+    ]
+  },
+  {
+    title: "3D",
+    type: "group",
+    icon: Scale3d,
+    items: [
+      {
+        label: "Text to 3D",
+        route: "/text-to-3d",
+        type: "item",
+        icon: TextCursorInput,
+      },
+      {
+        label: "Image to 3D",
+        route: "/image-to-3d",
+        type: "item",
+        icon: Image,
+      },
+      {
+        label: "3D Viewer",
+        route: "/3d-viewer",
+        type: "item",
+        icon: Box,
       },
     ]
   }
